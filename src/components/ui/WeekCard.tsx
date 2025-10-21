@@ -1,8 +1,7 @@
 export default function WeekCard() {
   return (
     <div>
-      <footer className="bg-zinc-800">footer</footer>
-      <main>main</main>
+      <h1>WeekCard</h1>
     </div>
   );
 }
