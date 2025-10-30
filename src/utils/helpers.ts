@@ -1,8 +1,4 @@
-import {
-  WeatherDay,
-  WeatherHour,
-  WeatherWeek,
-} from "@/app/types";
+import { WeatherDay, WeatherHour, WeatherWeek } from "@/app/types";
 
 /**
  * Calculates the ISO-standard week key (the date of the Monday of that week).
@@ -70,9 +66,7 @@ export const groupByWeekAndDay = (hourlyData: WeatherHour[]): WeatherWeek[] => {
 
   // Iterate over the Week Groups
   for (const weekGroup of groupedDataMap.values()) {
-    const dailyGroups: WeatherDay[] = Array.from(
-      weekGroup.daysMap.values()
-    );
+    const dailyGroups: WeatherDay[] = Array.from(weekGroup.daysMap.values());
 
     // Sort days within the week to ensure Monday comes before Tuesday, etc.
     dailyGroups.sort(
