@@ -1,57 +1,37 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
-interface LocationState {
-  latitude: number | null;
-  longitude: number | null;
-  error: string | null;
-  loading: boolean;
+interface GeoLocation {
+  lat: number;
+  lon: number;
 }
 
-export default function useGeolocation() {
-  const [location, setLocation] = useState<LocationState>({
-    latitude: null,
-    longitude: null,
-    error: null,
-    loading: true,
-  });
+export default function useGeoLocation() {
+  const [coords, setCoords] = useState<GeoLocation | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      setLocation({
-        latitude: null,
-        longitude: null,
-        error: "Geolocation not supported",
-        loading: false,
-      });
+    if (!("geolocation" in navigator)) {
+      setError("Geolocation not supported by your browser.");
+      setLoading(false);
       return;
     }
 
-    const onSuccess = (position: GeolocationPosition) => {
-      setLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        error: null,
-        loading: false,
-      });
-    };
-
-    const onError = (error: GeolocationPositionError) => {
-      setLocation({
-        latitude: null,
-        longitude: null,
-        error: error.message,
-        loading: false,
-      });
-    };
-
-    navigator.geolocation.getCurrentPosition(onSuccess, onError, {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0,
-    });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({
+          lat: pos.coords.latitude,
+          lon: pos.coords.longitude,
+        });
+        setLoading(false);
+      },
+      (err) => {
+        setError("Failed to get location.");
+        setLoading(false);
+      }
+    );
   }, []);
 
-  return location;
+  return { coords, error, loading };
 }
