@@ -7,6 +7,12 @@ interface WeekListProps {
   weather: WeatherWeek[];
 }
 
+/**
+ * A component that displays a list of weather data for each week.
+ * Accepts an array of WeatherWeek objects as props.
+ * @param {WeatherWeek[]} weather - An array of weather data for the week.
+ * @returns {JSX.Element} - The component.
+ */
 export default function WeekList({ weather }: WeekListProps) {
   const [expandedDay, setExpandedDay] = useState<ExpandedDay | null>(null);
 
