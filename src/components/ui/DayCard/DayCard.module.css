@@ -1,0 +1,16 @@
+@reference "tailwindcss";
+
+.selected {
+  background-color: var(--color-surface-light);
+  border: 1px solid var(--color-surface-light-border);
+}
+
+.dayCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  @apply rounded-xl border px-2 cursor-pointer transition-all duration-300 h-28;
+}
+.dayCard:hover {
+  background-color: var(--color-surface-light);
+  @apply transition-all ease-out duration-300;
+}
