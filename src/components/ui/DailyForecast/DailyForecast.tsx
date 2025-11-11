@@ -16,14 +16,13 @@ interface DailyForecastProps {
  * @param {ExpandedDay | null} selectedDay - The currently selected day.
  * @param {(date: string) => void} onSelectDay - A function to be called when a
  * day card is clicked.
- * @returns {JSX.Element} - The component.
  */
 export default function DailyForecast({
   days,
   selectedDay,
   onSelectDay,
 }: DailyForecastProps) {
-  const weekDays: WeatherDay[] = Array(7).fill(null);
+  const weekDays: (WeatherDay | null)[] = Array(7).fill(null);
 
   days.forEach((day) => {
     let weekDayIndex = new Date(day.date).getDay();
@@ -32,23 +31,15 @@ export default function DailyForecast({
   });
 
   return (
-    <section className="daily-forecast-card grid grid-cols-7 gap-2">
-      {weekDays.map((day, dayIndex) =>
-        day ? (
-          <DayCard
-            key={dayIndex}
-            isSelected={day.date === selectedDay?.date}
-            date={day.date}
-            hourlyForecast={day.timeSeries}
-            onClick={() => onSelectDay(day.date)}
-          />
-        ) : (
-          <div
-            key={dayIndex}
-            className="border border-surface-border rounded-xl"
-          ></div>
-        )
-      )}
+    <section className="daily-forecast-card sm:flex sm:flex-col md:grid md:grid-cols-7 gap-2">
+      {weekDays.map((day, dayIndex) => (
+        <DayCard
+          key={dayIndex}
+          day={day}
+          isSelected={day?.date === selectedDay?.date && day !== null}
+          onSelected={day ? () => onSelectDay(day.date) : undefined}
+        />
+      ))}
     </section>
   );
 }
