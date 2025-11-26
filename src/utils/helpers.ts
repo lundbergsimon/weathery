@@ -92,3 +92,34 @@ export const groupByWeekAndDay = (hourlyData: WeatherHour[]): WeatherWeek[] => {
 
   return finalResult;
 };
+
+/**
+ * Returns an array of Date objects representing all the dates in the current
+ * local month.
+ *
+ * @returns {Date[]} An array of Date objects representing all the dates in the current month.
+ */
+export function getThisMonthDates(): Date[] {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  return Array.from(
+    { length: daysInMonth },
+    (_, i = 1) => new Date(year, month, i + 1)
+  );
+}
+
+export const displayWeekDay = (day: WeatherDay) =>
+  day.date === new Date().toISOString().slice(0, 10)
+    ? "Today"
+    : new Date(day.date).toLocaleString("en-US", {
+        weekday: "long",
+      });
+
+export const displayMonthDay = (day: WeatherDay) =>
+  new Date(day.date).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
