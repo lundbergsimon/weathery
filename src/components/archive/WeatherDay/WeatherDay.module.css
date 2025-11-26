@@ -1,0 +1,24 @@
+@reference "../../../app/globals.css";
+
+.dayCard {
+  @apply bg-surface border-2 border-surface-border rounded-xl cursor-not-allowed border-dashed transition-all duration-300 h-full lg:h-50 lg:flex lg:justify-center lg:items-center;
+}
+.hasData {
+  @apply bg-surface cursor-pointer border-solid;
+}
+.hasData:hover {
+  @apply opacity-[0.6] transition-all ease-out duration-300;
+}
+.dayCard:not(hasData) {
+  @apply sm:block;
+}
+
+.currentDay .date {
+  /* color: var(--color-primary); */
+  @apply text-primary;
+}
+
+.date {
+  /* background-color: var(--color-surface-light); */
+  @apply bg-surface-light text-center py-1 rounded-t-xl flex justify-center;
+}
