@@ -8,14 +8,18 @@ import { WeatherDay, WeatherHour, WeatherWeek } from "@/app/types";
 const getStartOfWeek = (dateString: Date): string => {
   const date = new Date(dateString);
   // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-  const localDayIndex = (date.getDay() === 0 ? 6 : date.getDay() - 1);
+  const localDayIndex = date.getDay() === 0 ? 6 : date.getDay() - 1;
   // Get the current date
   const monday = new Date(date);
   // Subtract the number of days past Monday
   monday.setDate(date.getDate() - localDayIndex);
 
   // Format as YYYY-MM-DD using ISO string to ensure consistency
-  return monday.toLocaleDateString("sv-SE", { year: "numeric", month: "2-digit", day: "2-digit" });
+  return monday.toLocaleDateString("sv-SE", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
 };
 
 /**
