@@ -1,10 +1,14 @@
 "use client";
 
+import Card from "@/components/card";
+import HorizontalScrollContainer from "@/components/horizontal-scroll-container";
+import HourlyWeatherRow from "@/components/hourly-weather-row";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
-import WeekCard from "@/components/ui/WeatherCard";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
+import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
+import { useState } from "react";
 
 /**
  * A page that displays the current weather data for a given location.
@@ -18,10 +22,11 @@ import useWeather from "@/hooks/useWeather";
 export default function WeatherPage() {
   const { coords, error: geoError, loading: geoLoading } = useGeoLocation();
   const {
-    weather,
+    weather: weeks,
     error: weatherError,
     loading: weatherLoading,
   } = useWeather(coords?.lat, coords?.lon);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   if (geoLoading || weatherLoading)
     return <LoadingState message="Fetching weather data..." />;
@@ -29,13 +34,51 @@ export default function WeatherPage() {
   if (geoError) return <ErrorState message={geoError} />;
   if (weatherError) return <ErrorState message={weatherError} />;
 
-  if (!coords || !weather)
+  if (coords === undefined || weeks === undefined)
     return <ErrorState message="No weather data available." />;
 
   return (
-    <main className="flex flex-col items-center justify-center p-2">
-      <h1 className="text-3xl font-semibold mb-6">Current Weather</h1>
-      <WeekCard weather={weather} coords={coords} />
-    </main>
+    <>
+      <header className="px-2 font-mono flex gap-1 items-baseline">
+        <h1>Weathery</h1>
+        <h1 className="text-text-muted text-sm">(Alpha)</h1>
+      </header>
+      <main className="flex items-center justify-center p-4">
+        <div className="flex flex-col gap-4 min-w-0">
+          {weeks.map((week) =>
+            week.days.map((day) => (
+              <div className="" key={day.date}>
+                <h2 className="text-2xl font-bold mb-1 px-1 flex justify-between">
+                  <span>{displayWeekDay(day)}</span>
+                  <span>{displayMonthDay(day)}</span>
+                </h2>
+                <Card>
+                  <HorizontalScrollContainer>
+                    <HourlyWeatherRow
+                      data={day.hours.map((hour) => ({
+                        hour: new Date(hour.validTime),
+                        parameters: hour.parameters.map((param) => ({
+                          ...param,
+                          values: param.values.map((value) =>
+                            Number(value.toFixed(0))
+                          ),
+                        })),
+                      }))}
+                      isExpanded={isExpanded}
+                    />
+                  </HorizontalScrollContainer>
+                  <a
+                    onClick={() => setIsExpanded((prev) => !prev)}
+                    className="cursor-pointer hover:underline"
+                  >
+                    {isExpanded ? "show less" : "show more"}
+                  </a>
+                </Card>
+              </div>
+            ))
+          )}
+        </div>
+      </main>
+    </>
   );
 }
