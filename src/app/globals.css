@@ -1,60 +1,71 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  /* Old */
-  --color-background: var(--bg-bottom);
-  --color-foreground: var(--text-main);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
 
-  --color-bottom: var(--bg-bottom);
-  --color-middle: var(--bg-middle);
-  --color-top: var(--bg-top);
-
-  /* New */
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
-
-  --color-bg-main: var(--color-bg-main);
 
   --color-surface: var(--color-surface);
   --color-surface-border: var(--color-surface-border);
 
   --color-surface-light: var(--color-surface-light);
   --color-surface-light-border: var(--color-surface-light-border);
+
+  --color-primary: var(--color-primary);
+  --color-primary-border: var(--color-primary-border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Old */
-    --bg-bottom: oklch(20% 0 264);
-    --bg-middle: oklch(25% 0 264);
-    --bg-top: oklch(30% 0 264);
 
-    --border-middle: var(--bg-top);
-    --border-top: oklch(35% 0 264);
+:root {
+  --background: oklch(95% 0 264);
 
-    /* New */
-    --text-main: oklch(90% 0 264);
-    --text-muted: oklch(70% 0 264);
+  --color-surface: oklch(90% 0 264);
+  --color-surface-border: oklch(80% 0 264);
 
-    --color-bg-main: oklch(20% 0 264);
+  --color-surface-light: oklch(85% 0 264);
+  --color-surface-light-border: oklch(75% 0 264);
 
-    --color-surface: oklch(25% 0 264);
-    --color-surface-border: oklch(35% 0 264);
+  --text-main: oklch(30% 0 264);
+  --text-muted: oklch(50% 0 264);
 
-    --color-surface-light: oklch(30% 0 264);
-    --color-surface-light-border: oklch(40% 0 264);
+  --color-primary: oklch(55% 0.2 245);
+  --color-primary-border: oklch(65% 0.2 245);
+  --color-primary-text: oklch(90% 0 264);
+  --color-primary-text-muted: oklch(70% 0 264);
+}
+
+.dark {
+  --background: oklch(20% 0 264);
+
+  --text-main: oklch(90% 0 264);
+  --text-muted: oklch(70% 0 264);
+
+  --color-surface: oklch(25% 0 264);
+  --color-surface-border: oklch(35% 0 264);
+  --color-surface-text: oklch(90% 0 264);
+  --color-surface-text-muted: oklch(70% 0 264);
+
+  --color-surface-light: oklch(30% 0 264);
+  --color-surface-light-border: oklch(40% 0 264);
+
+  --color-primary: oklch(55% 0.2 245);
+  --color-primary-border: oklch(65% 0.2 245);
+  --color-primary-text: oklch(90% 0 264);
+  --color-primary-text-muted: oklch(70% 0 264);
+}
+
+@layer base {
+  h1 {
+    font-size: var(--text-2xl);
   }
-}
-
-body {
-  background: var(--bg-bottom);
-  color: var(--text-main);
-  font-family: Arial, Helvetica, sans-serif;
+  h2 {
+    font-size: var(--text-xl);
+  }
+  h3 {
+    font-size: var(--text-lg);
+  }
+  body {
+    @apply bg-background;
+  }
 }
