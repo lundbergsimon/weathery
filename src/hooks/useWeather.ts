@@ -12,8 +12,8 @@ import { useEffect, useState } from "react";
  *   states.
  */
 export default function useWeather(lat?: number, lon?: number) {
-  const [weather, setWeather] = useState<WeatherWeek[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [weather, setWeather] = useState<WeatherWeek[] | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
