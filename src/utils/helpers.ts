@@ -5,16 +5,17 @@ import { WeatherDay, WeatherHour, WeatherWeek } from "@/app/types";
  * @param date - A Date object.
  * @returns A date string in 'YYYY-MM-DD' format for the Monday of the week.
  */
-const getWeekKey = (date: Date): string => {
+const getStartOfWeek = (dateString: Date): string => {
+  const date = new Date(dateString);
   // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-  const day = date.getUTCDay();
-  // ISO week starts on Monday (1). Adjust Sunday (0) to 7 for calculation.
-  const diff = date.getUTCDate() - (day === 0 ? 6 : day - 1); // Adjust for the Monday
-  const monday = new Date(date.getTime());
-  monday.setUTCDate(diff);
+  const localDayIndex = (date.getDay() === 0 ? 6 : date.getDay() - 1);
+  // Get the current date
+  const monday = new Date(date);
+  // Subtract the number of days past Monday
+  monday.setDate(date.getDate() - localDayIndex);
 
-  // Format as YYYY-MM-DD
-  return monday.toISOString().slice(0, 10);
+  // Format as YYYY-MM-DD using ISO string to ensure consistency
+  return monday.toLocaleDateString("sv-SE", { year: "numeric", month: "2-digit", day: "2-digit" });
 };
 
 /**
@@ -32,8 +33,8 @@ export const groupByWeekAndDay = (hourlyData: WeatherHour[]): WeatherWeek[] => {
     const date = new Date(currentHour.validTime);
 
     // 1. Calculate the Grouping Keys
-    const weekKey = getWeekKey(date);
-    const dayKey = date.toISOString().slice(0, 10); // YYYY-MM-DD
+    const weekKey = getStartOfWeek(date);
+    const dayKey = date.toISOString().split("T")[0];
 
     // 2. Initialize the Week Group if it doesn't exist
     if (!acc.has(weekKey)) {
@@ -50,12 +51,12 @@ export const groupByWeekAndDay = (hourlyData: WeatherHour[]): WeatherWeek[] => {
       weekGroup.daysMap.set(dayKey, {
         date: dayKey,
         // dayOfWeek: dayOfWeek,
-        timeSeries: [],
+        hours: [],
       });
     }
 
     // 4. Add the current hourly data object to the correct day group
-    weekGroup.daysMap.get(dayKey)!.timeSeries.push(currentHour);
+    weekGroup.daysMap.get(dayKey)!.hours.push(currentHour);
 
     return acc;
   }, new Map<string, { weekStartDate: string; daysMap: Map<string, WeatherDay> }>());
