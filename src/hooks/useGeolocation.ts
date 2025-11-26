@@ -7,8 +7,8 @@ interface GeoLocation {
 }
 
 export default function useGeoLocation() {
-  const [coords, setCoords] = useState<GeoLocation | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [coords, setCoords] = useState<GeoLocation | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function useGeoLocation() {
         setLoading(false);
       },
       (err) => {
-        setError("Failed to get location.");
+        setError("Failed to get location. " + err.message);
         setLoading(false);
       }
     );
