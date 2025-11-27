@@ -55,7 +55,7 @@ export default function WeatherPage() {
             </h1>
             <p className="text-text-muted">Place</p>
           </Card>
-          <div
+          <section
             id="day-list"
             className="flex flex-col justify-center max-w-fit min-w-0"
           >
@@ -69,7 +69,7 @@ export default function WeatherPage() {
                 />
               ))
             )}
-          </div>
+          </section>
         </div>
       </main>
     </>
