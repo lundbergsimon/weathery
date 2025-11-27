@@ -40,7 +40,7 @@ export default function WeatherPage() {
 
   return (
     <>
-      <header className="px-2 font-mono flex gap-1 items-baseline">
+      <header className="px-2 py-1 font-mono flex gap-1 justify-center items-baseline">
         <h1>Weathery</h1>
         <h1 className="text-text-muted text-sm">(Alpha)</h1>
       </header>
