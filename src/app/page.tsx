@@ -57,7 +57,7 @@ export default function WeatherPage() {
           </Card>
           <section
             id="day-list"
-            className="flex flex-col justify-center max-w-fit min-w-0"
+            className="flex flex-col gap-4 pt-4 justify-center max-w-fit min-w-0"
           >
             {weeks.map((week) =>
               week.days.map((day) => (
