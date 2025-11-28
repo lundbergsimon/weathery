@@ -5,11 +5,12 @@ import HorizontalScrollContainer from "@/components/horizontal-scroll-container"
 import HourlyWeatherRow from "@/components/hourly-weather-row";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
+import { WeatherDay } from "@/types/index";
 import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
 import React, { useState } from "react";
-import { WeatherDay } from "./types";
 
 /**
  * A page that displays the current weather data for a given location.
@@ -38,6 +39,11 @@ export default function WeatherPage() {
   if (coords === undefined || weeks === undefined)
     return <ErrorState message="No weather data available." />;
 
+  const currentHour = weeks[0].days[0].hours[0];
+  const currentSymbol = currentHour.parameters.find((p) => p.name === "Wsymb2")!
+    .values[0]!;
+  const IconComponent = SMHI_WEATHER_SYMBOLS[currentSymbol]!;
+
   return (
     <>
       <header className="px-2 py-1 font-mono flex gap-1 justify-center items-baseline">
@@ -53,6 +59,14 @@ export default function WeatherPage() {
                 .find((param) => param.name === "t")
                 ?.values[0].toFixed(0)}°`}
             </h1>
+            {IconComponent && (
+              <span
+                className="text-text-muted text-3xl"
+                title={IconComponent.label}
+              >
+                <IconComponent.icon />
+              </span>
+            )}
             <p className="text-text-muted">Place</p>
           </Card>
           <section
