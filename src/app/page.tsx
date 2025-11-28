@@ -97,6 +97,15 @@ interface DayComponentProps {
 }
 
 function DayComponent({ day, isExpanded, setIsExpanded }: DayComponentProps) {
+  const temperatureLow = day.hours.reduce(
+    (acc, hour) => Math.min(acc, hour.parameters.find((p) => p.name === "t")!.values[0]!),
+    Infinity
+  );
+  const temperatureHigh = day.hours.reduce(
+    (acc, hour) => Math.max(acc, hour.parameters.find((p) => p.name === "t")!.values[0]!),
+    -Infinity
+  );
+
   return (
     <div className="" key={day.date}>
       <h2 className="text-2xl font-bold mb-1 px-1 flex justify-between">
@@ -104,6 +113,7 @@ function DayComponent({ day, isExpanded, setIsExpanded }: DayComponentProps) {
         <span>{displayMonthDay(day)}</span>
       </h2>
       <Card>
+        <div className="text-text-main text-lg mb-4">{temperatureLow.toFixed(0)}° / {temperatureHigh.toFixed(0)}°</div>
         <HorizontalScrollContainer>
           <HourlyWeatherRow
             data={day.hours.map((hour) => ({
