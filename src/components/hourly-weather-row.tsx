@@ -1,4 +1,4 @@
-import { WeatherParameter } from "@/app/types";
+import { WeatherParameter } from "@/types";
 
 interface HourlyWeatherRowProps {
   data: { hour: Date; parameters: WeatherParameter[] }[];

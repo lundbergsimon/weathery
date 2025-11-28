@@ -1,4 +1,4 @@
-import { SMHIWeatherData, WeatherWeek } from "@/app/types";
+import { SMHIWeatherData, WeatherWeek } from "@/types";
 import { groupByWeekAndDay } from "@/utils/helpers";
 
 const BASE_URL =
