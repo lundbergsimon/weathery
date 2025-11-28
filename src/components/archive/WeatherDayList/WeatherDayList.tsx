@@ -1,4 +1,4 @@
-import { WeatherDay } from "@/app/types";
+import { WeatherDay } from "@/types";
 import DayCard from "../WeatherDay/WeatherDay";
 
 interface WeatherDayListProps {

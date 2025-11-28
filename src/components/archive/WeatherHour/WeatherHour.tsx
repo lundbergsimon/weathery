@@ -1,4 +1,4 @@
-import { WeatherHour as IWeatherHour, WeatherParameter } from "@/app/types";
+import { WeatherHour as IWeatherHour, WeatherParameter } from "@/types";
 import clsx from "clsx";
 
 interface WeatherHourCardProps {

@@ -1,11 +1,11 @@
-import { WeatherDay } from "@/app/types";
+import { WeatherDay } from "@/types";
 import clsx from "clsx";
 import { Droplets, Wind } from "lucide-react";
 import {
-  getAverageRelativeHumidity,
-  getAverageWindSpeed,
-  getHighestTemperature,
-  getLowestTemperature,
+    getAverageRelativeHumidity,
+    getAverageWindSpeed,
+    getHighestTemperature,
+    getLowestTemperature,
 } from "./WeatherDay.helpers";
 import styles from "./WeatherDay.module.css";
 

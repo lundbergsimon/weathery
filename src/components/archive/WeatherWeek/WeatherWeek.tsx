@@ -1,4 +1,4 @@
-import { WeatherWeek as IWeatherWeek } from "@/app/types";
+import { WeatherWeek as IWeatherWeek } from "@/types";
 import { useState } from "react";
 import WeatherDayList from "../WeatherDayList/WeatherDayList";
 import WeatherHourList from "../WeatherHourList/WeatherHourList";
