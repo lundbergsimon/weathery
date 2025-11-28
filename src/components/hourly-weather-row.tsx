@@ -3,13 +3,9 @@ import { WeatherParameter } from "@/types";
 
 interface HourlyWeatherRowProps {
   data: { hour: Date; parameters: WeatherParameter[] }[];
-  isExpanded: boolean;
 }
 
-export default function HourlyWeatherRow({
-  data,
-  isExpanded,
-}: HourlyWeatherRowProps) {
+export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
   return (
     <div className="pb-4">
       {/* Display each hour horizontally */}
@@ -29,14 +25,9 @@ export default function HourlyWeatherRow({
                 })}
               </p>
               <p className="font-bold">{item.parameters[0].values[0]}°</p>
-              <span className="text-text-muted flex justify-center text-2xl">{<WeatherSymbol.icon />}</span>
-              {isExpanded && (
-                <div>
-                  <p className="text-xs text-text-muted">
-                    {item.parameters[1].values[0]}
-                  </p>
-                </div>
-              )}
+              <span className="text-text-muted flex justify-center text-2xl">
+                {<WeatherSymbol.icon />}
+              </span>
             </div>
           );
         })}

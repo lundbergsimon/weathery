@@ -10,7 +10,6 @@ import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
 import { WeatherDay } from "@/types/index";
 import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
-import React, { useState } from "react";
 
 /**
  * A page that displays the current weather data for a given location.
@@ -28,7 +27,6 @@ export default function WeatherPage() {
     error: weatherError,
     loading: weatherLoading,
   } = useWeather(coords?.lat, coords?.lon);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   if (geoLoading || weatherLoading)
     return <LoadingState message="Fetching weather data..." />;
@@ -67,21 +65,13 @@ export default function WeatherPage() {
                 <IconComponent.icon />
               </span>
             )}
-            <p className="text-text-muted">Place</p>
           </Card>
           <section
             id="day-list"
             className="flex flex-col gap-4 pt-4 justify-center max-w-fit min-w-0"
           >
             {weeks.map((week) =>
-              week.days.map((day) => (
-                <DayComponent
-                  key={day.date}
-                  day={day}
-                  isExpanded={isExpanded}
-                  setIsExpanded={setIsExpanded}
-                />
-              ))
+              week.days.map((day) => <DayComponent key={day.date} day={day} />)
             )}
           </section>
         </div>
@@ -97,11 +87,9 @@ export default function WeatherPage() {
 
 interface DayComponentProps {
   day: WeatherDay;
-  isExpanded: boolean;
-  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function DayComponent({ day, isExpanded, setIsExpanded }: DayComponentProps) {
+function DayComponent({ day }: DayComponentProps) {
   const temperatureLow = day.hours.reduce(
     (acc, hour) =>
       Math.min(acc, hour.parameters.find((p) => p.name === "t")!.values[0]!),
@@ -132,15 +120,8 @@ function DayComponent({ day, isExpanded, setIsExpanded }: DayComponentProps) {
                 values: param.values.map((value) => Number(value.toFixed(0))),
               })),
             }))}
-            isExpanded={isExpanded}
           />
         </HorizontalScrollContainer>
-        <a
-          onClick={() => setIsExpanded((prev) => !prev)}
-          className="cursor-pointer hover:underline"
-        >
-          {isExpanded ? "show less" : "show more"}
-        </a>
       </Card>
     </div>
   );
