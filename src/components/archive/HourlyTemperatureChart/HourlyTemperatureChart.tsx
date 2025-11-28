@@ -1,4 +1,4 @@
-import { WeatherDay } from "@/app/types";
+import { WeatherDay } from "@/types";
 import { useTheme } from "@mui/material/styles";
 import { LineChart } from "@mui/x-charts";
 

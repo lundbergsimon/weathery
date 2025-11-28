@@ -1,4 +1,4 @@
-import { WeatherDay, WeatherHour, WeatherWeek } from "@/app/types";
+import { WeatherDay, WeatherHour, WeatherWeek } from "@/types";
 
 /**
  * Calculates the ISO-standard week key (the date of the Monday of that week).

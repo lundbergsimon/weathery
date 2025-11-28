@@ -1,4 +1,4 @@
-import { WeatherWeek as IWeatherWeek } from "@/app/types";
+import { WeatherWeek as IWeatherWeek } from "@/types";
 import WeatherWeek from "../WeatherWeek/WeatherWeek";
 
 interface WeatherWeekListProps {

@@ -1,5 +1,5 @@
-import { WeatherWeek } from '@/app/types';
 import WeekSection from '@/components/archive/WeekSection/WeekSection';
+import { WeatherWeek } from '@/types';
 import { render } from '@testing-library/react';
 import React from 'react';
 

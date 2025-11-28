@@ -5,10 +5,11 @@ import HorizontalScrollContainer from "@/components/horizontal-scroll-container"
 import HourlyWeatherRow from "@/components/hourly-weather-row";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
+import { WeatherDay } from "@/types/index";
 import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
-import { useState } from "react";
 
 /**
  * A page that displays the current weather data for a given location.
@@ -26,7 +27,6 @@ export default function WeatherPage() {
     error: weatherError,
     loading: weatherLoading,
   } = useWeather(coords?.lat, coords?.lon);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   if (geoLoading || weatherLoading)
     return <LoadingState message="Fetching weather data..." />;
@@ -37,48 +37,92 @@ export default function WeatherPage() {
   if (coords === undefined || weeks === undefined)
     return <ErrorState message="No weather data available." />;
 
+  const currentHour = weeks[0].days[0].hours[0];
+  const currentSymbol = currentHour.parameters.find((p) => p.name === "Wsymb2")!
+    .values[0]!;
+  const IconComponent = SMHI_WEATHER_SYMBOLS[currentSymbol]!;
+
   return (
     <>
-      <header className="px-2 font-mono flex gap-1 items-baseline">
+      <header className="px-2 py-1 font-mono flex gap-1 justify-center items-baseline">
         <h1>Weathery</h1>
         <h1 className="text-text-muted text-sm">(Alpha)</h1>
       </header>
-      <main className="flex items-center justify-center p-4">
-        <div className="flex flex-col gap-4 min-w-0">
-          {weeks.map((week) =>
-            week.days.map((day) => (
-              <div className="" key={day.date}>
-                <h2 className="text-2xl font-bold mb-1 px-1 flex justify-between">
-                  <span>{displayWeekDay(day)}</span>
-                  <span>{displayMonthDay(day)}</span>
-                </h2>
-                <Card>
-                  <HorizontalScrollContainer>
-                    <HourlyWeatherRow
-                      data={day.hours.map((hour) => ({
-                        hour: new Date(hour.validTime),
-                        parameters: hour.parameters.map((param) => ({
-                          ...param,
-                          values: param.values.map((value) =>
-                            Number(value.toFixed(0))
-                          ),
-                        })),
-                      }))}
-                      isExpanded={isExpanded}
-                    />
-                  </HorizontalScrollContainer>
-                  <a
-                    onClick={() => setIsExpanded((prev) => !prev)}
-                    className="cursor-pointer hover:underline"
-                  >
-                    {isExpanded ? "show less" : "show more"}
-                  </a>
-                </Card>
-              </div>
-            ))
-          )}
+      <main className="flex flex-col items-center justify-center p-4">
+        <div id="content" className="w-full max-w-fit">
+          <Card>
+            <p className="text-text-muted">Current Weather</p>
+            <h1 className="font-bold text-6xl">
+              {`${weeks[0].days[0].hours[0].parameters
+                .find((param) => param.name === "t")
+                ?.values[0].toFixed(0)}°`}
+            </h1>
+            {IconComponent && (
+              <span
+                className="text-text-muted text-3xl"
+                title={IconComponent.label}
+              >
+                <IconComponent.icon />
+              </span>
+            )}
+          </Card>
+          <section
+            id="day-list"
+            className="flex flex-col gap-4 pt-4 justify-center max-w-fit min-w-0"
+          >
+            {weeks.map((week) =>
+              week.days.map((day) => <DayComponent key={day.date} day={day} />)
+            )}
+          </section>
         </div>
       </main>
+      <footer className="min-h-10">
+        <p className="text-xs text-text-muted text-center">
+          Data provided by SMHI
+        </p>
+      </footer>
     </>
+  );
+}
+
+interface DayComponentProps {
+  day: WeatherDay;
+}
+
+function DayComponent({ day }: DayComponentProps) {
+  const temperatureLow = day.hours.reduce(
+    (acc, hour) =>
+      Math.min(acc, hour.parameters.find((p) => p.name === "t")!.values[0]!),
+    Infinity
+  );
+  const temperatureHigh = day.hours.reduce(
+    (acc, hour) =>
+      Math.max(acc, hour.parameters.find((p) => p.name === "t")!.values[0]!),
+    -Infinity
+  );
+
+  return (
+    <div className="" key={day.date}>
+      <h2 className="text-2xl font-bold mb-1 px-1 flex justify-between">
+        <span>{displayWeekDay(day)}</span>
+        <span>{displayMonthDay(day)}</span>
+      </h2>
+      <Card>
+        <div className="text-text-main text-lg mb-4">
+          {temperatureLow.toFixed(0)}° / {temperatureHigh.toFixed(0)}°
+        </div>
+        <HorizontalScrollContainer>
+          <HourlyWeatherRow
+            data={day.hours.map((hour) => ({
+              hour: new Date(hour.validTime),
+              parameters: hour.parameters.map((param) => ({
+                ...param,
+                values: param.values.map((value) => Number(value.toFixed(0))),
+              })),
+            }))}
+          />
+        </HorizontalScrollContainer>
+      </Card>
+    </div>
   );
 }

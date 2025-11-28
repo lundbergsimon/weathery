@@ -1,4 +1,4 @@
-import { WeatherHour as IWeatherHour } from "@/app/types";
+import { WeatherHour as IWeatherHour } from "@/types";
 import clsx from "clsx";
 import WeatherHour from "../WeatherHour/WeatherHour";
 

@@ -1,4 +1,4 @@
-import { WeatherDay, WeatherWeek } from "@/app/types";
+import { WeatherDay, WeatherWeek } from "@/types";
 import { useState } from "react";
 import DayCard from "../WeatherDay/WeatherDay";
 import HourlyForecast from "../WeatherHourList/WeatherHourList";

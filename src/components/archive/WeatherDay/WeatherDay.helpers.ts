@@ -1,4 +1,4 @@
-import { WeatherHour } from "@/app/types";
+import { WeatherHour } from "@/types";
 
 /**
  * Calculates the average temperature from an array of WeatherHour objects.
