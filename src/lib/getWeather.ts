@@ -10,11 +10,26 @@ const BASE_URL =
  * @param {number} longitude - The longitude of the location.
  * @param {number} latitude - The latitude of the location.
  * @returns {Promise<WeatherWeek[]>} - A promise that resolves with an array of WeatherWeek objects.
+ *
+ * @example
+ * // Get weather data for Kiruna
+ * const weather = await getWeather(20.22, 67.86);
  */
-export default async function getWeather(
+export async function getWeather(
   longitude: number,
   latitude: number
 ): Promise<WeatherWeek[]> {
+  const data = await getWeatherRaw(longitude, latitude);
+
+  const formatedData = groupByWeekAndDay(data.timeSeries);
+
+  return formatedData;
+}
+
+export async function getWeatherRaw(
+  longitude: number,
+  latitude: number
+): Promise<SMHIWeatherData> {
   const lon = longitude.toFixed(2);
   const lat = latitude.toFixed(2);
   const endpoint = `${BASE_URL}/lon/${lon}/lat/${lat}/data.json`;
@@ -27,7 +42,5 @@ export default async function getWeather(
 
   const data: SMHIWeatherData = await res.json();
 
-  const values = groupByWeekAndDay(data.timeSeries);
-
-  return values;
+  return data;
 }
