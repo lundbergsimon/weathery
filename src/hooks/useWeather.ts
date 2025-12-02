@@ -1,5 +1,5 @@
 "use client";
-import getWeather from "@/lib/getWeather";
+import { getWeather } from "@/lib/getWeather";
 import { WeatherWeek } from "@/types";
 import { useEffect, useState } from "react";
 
