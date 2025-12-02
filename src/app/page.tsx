@@ -44,10 +44,6 @@ export default function WeatherPage() {
 
   return (
     <>
-      <header className="px-2 py-1 font-mono flex gap-1 justify-center items-baseline">
-        <h1>Weathery</h1>
-        <h1 className="text-text-muted text-sm">(Alpha)</h1>
-      </header>
       <main className="flex flex-col items-center justify-center p-4">
         <div id="content" className="w-full max-w-fit">
           <Card>
