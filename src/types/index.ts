@@ -58,23 +58,23 @@ export const WeatherParametersFullNames: Record<WeatherParameterName, string> =
     tp: "Total precipitation",
   };
 
-export interface WeatherParameter {
+export type WeatherParameter = {
   name: WeatherParameterName;
   unit: WeatherParameterUnit;
   values: number[];
 }
 
-export interface WeatherHour {
+export type WeatherHour = {
   validTime: string;
   parameters: WeatherParameter[];
 }
 
-export interface Geometry {
+export type Geometry = {
   type: string;
   coordinates: number[];
 }
 
-export interface SMHIWeatherData {
+export type SMHIWeatherData = {
   approvedTime: string;
   referenceTime: string;
   geometry: Geometry;
@@ -85,7 +85,7 @@ export interface SMHIWeatherData {
 /*                                  Formatted                                 */
 /* -------------------------------------------------------------------------- */
 
-export interface WeatherDay {
+export type WeatherDay = {
   date: string;
   hours: WeatherHour[];
 }

@@ -5,11 +5,13 @@ import HorizontalScrollContainer from "@/components/horizontal-scroll-container"
 import HourlyWeatherRow from "@/components/hourly-weather-row";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import WeatherIcon from "@/components/ui/weather-icon";
 import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
-import { WeatherDay } from "@/types/index";
+import { WeatherDay, WeatherHour } from "@/types/index";
 import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
+import { WiDirectionUp } from "react-icons/wi";
 
 /**
  * A page that displays the current weather data for a given location.
@@ -37,35 +39,13 @@ export default function WeatherPage() {
   if (coords === undefined || weeks === undefined)
     return <ErrorState message="No weather data available." />;
 
-  const currentHour = weeks[0].days[0].hours[0];
-  const currentSymbol = currentHour.parameters.find((p) => p.name === "Wsymb2")!
-    .values[0]!;
-  const IconComponent = SMHI_WEATHER_SYMBOLS[currentSymbol]!;
-
   return (
     <>
-      <header className="px-2 py-1 font-mono flex gap-1 justify-center items-baseline">
-        <h1>Weathery</h1>
-        <h1 className="text-text-muted text-sm">(Alpha)</h1>
-      </header>
       <main className="flex flex-col items-center justify-center p-4">
         <div id="content" className="w-full max-w-fit">
-          <Card>
-            <p className="text-text-muted">Current Weather</p>
-            <h1 className="font-bold text-6xl">
-              {`${weeks[0].days[0].hours[0].parameters
-                .find((param) => param.name === "t")
-                ?.values[0].toFixed(0)}°`}
-            </h1>
-            {IconComponent && (
-              <span
-                className="text-text-muted text-3xl"
-                title={IconComponent.label}
-              >
-                <IconComponent.icon />
-              </span>
-            )}
-          </Card>
+          <section>
+            <CurrentWeatherCard data={weeks[0].days[0].hours[0]} />
+          </section>
           <section
             id="day-list"
             className="flex flex-col gap-4 pt-4 justify-center max-w-fit min-w-0"
@@ -84,6 +64,10 @@ export default function WeatherPage() {
     </>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                DayComponent                                */
+/* -------------------------------------------------------------------------- */
 
 interface DayComponentProps {
   day: WeatherDay;
@@ -124,5 +108,59 @@ function DayComponent({ day }: DayComponentProps) {
         </HorizontalScrollContainer>
       </Card>
     </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             CurrentWeatherCard                             */
+/* -------------------------------------------------------------------------- */
+
+interface CurrentWeatherCardProps {
+  data: WeatherHour;
+}
+
+function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
+  const currentHour = new Date(data.validTime).getHours();
+  const currentSymbol = data.parameters.find((p) => p.name === "Wsymb2")!
+    .values[0]!;
+  const WeatherSymbol = SMHI_WEATHER_SYMBOLS[currentSymbol]!;
+
+  const temperature = data.parameters
+    .find((p) => p.name === "t")!
+    .values[0].toFixed(0);
+  const windSpeed = data.parameters
+    .find((p) => p.name === "ws")!
+    .values[0].toFixed(0);
+  const windDirection = data.parameters.find((p) => p.name === "wd")!.values[0];
+  const humidity = data.parameters.find((p) => p.name === "r")!.values[0];
+
+  return (
+    <Card>
+      <p className="text-text-muted">Current Weather</p>
+      <div className="flex">
+        <h1 className="font-bold text-6xl pr-[10%]">{temperature}°</h1>
+        <div className="text-text-muted">
+          <div className="flex items-center">
+            <span className="mr-1">Wind: </span>
+            <span className="text-text-main font-bold">{windSpeed} m/s</span>
+            <WiDirectionUp
+              className="inline text-text-main"
+              size={30}
+              style={{ rotate: `${windDirection}deg` }}
+            />
+          </div>
+
+          <div className="flex items-center">
+            <span className="mr-1">Humidity:</span>
+            <span className="text-text-main font-bold">{humidity}%</span>
+          </div>
+        </div>
+      </div>
+      {WeatherSymbol && (
+        <span className="text-text-muted text-3xl">
+          <WeatherIcon weatherSymbol={WeatherSymbol} hour={currentHour} />
+        </span>
+      )}
+    </Card>
   );
 }

@@ -34,11 +34,13 @@ export const groupByWeekAndDay = (hourlyData: WeatherHour[]): WeatherWeek[] => {
   // Map to hold the intermediate structure for efficient access and insertion:
   const groupedDataMap = hourlyData.reduce((acc, currentHour) => {
     // Convert the string timestamp to a Date object
-    const date = new Date(currentHour.validTime);
+    const utcDate = new Date(currentHour.validTime);
 
     // 1. Calculate the Grouping Keys
-    const weekKey = getStartOfWeek(date);
-    const dayKey = date.toISOString().split("T")[0];
+    const weekKey = getStartOfWeek(utcDate);
+    const localDateNum: number = utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000;
+    const localDate: Date = new Date(localDateNum);
+    const dayKey = localDate.toISOString().split("T")[0];
 
     // 2. Initialize the Week Group if it doesn't exist
     if (!acc.has(weekKey)) {
