@@ -13,37 +13,6 @@ import {
   WiThunderstorm,
 } from "react-icons/wi";
 
-// export const SMHI_WEATHER_SYMBOLS = [
-//   { value: 1, label: "Clear sky", icon: Sun },
-//   { value: 2, label: "Nearly clear sky", icon: Sun },
-//   { value: 3, label: "Variable cloudiness", icon: Sun },
-//   { value: 4, label: "Halfclear sky", icon: Sun },
-//   { value: 5, label: "Cloudy sky", icon: Sun },
-//   { value: 6, label: "Overcast", icon: Sun },
-//   { value: 7, label: "Fog", icon: Sun },
-//   { value: 8, label: "Light rain showers", icon: Sun },
-//   { value: 9, label: "Moderate rain showers", icon: Sun },
-//   { value: 10, label: "Heavy rain showers", icon: Sun },
-//   { value: 11, label: "Thunderstorm", icon: Sun },
-//   { value: 12, label: "EXAMPLE", icon: Sun },
-//   { value: 12, label: "EXAMPLE", icon: Sun },
-//   { value: 13, label: "EXAMPLE", icon: Sun },
-//   { value: 14, label: "EXAMPLE", icon: Sun },
-//   { value: 15, label: "EXAMPLE", icon: Sun },
-//   { value: 16, label: "EXAMPLE", icon: Sun },
-//   { value: 17, label: "EXAMPLE", icon: Sun },
-//   { value: 18, label: "EXAMPLE", icon: Sun },
-//   { value: 19, label: "EXAMPLE", icon: Sun },
-//   { value: 20, label: "EXAMPLE", icon: Sun },
-//   { value: 21, label: "EXAMPLE", icon: Sun },
-//   { value: 22, label: "EXAMPLE", icon: Sun },
-//   { value: 23, label: "EXAMPLE", icon: Sun },
-//   { value: 24, label: "EXAMPLE", icon: Sun },
-//   { value: 25, label: "EXAMPLE", icon: Sun },
-//   { value: 26, label: "EXAMPLE", icon: Sun },
-//   { value: 27, label: "EXAMPLE", icon: Sun },
-// ];
-
 export const SMHI_WEATHER_SYMBOLS: Record<
   number,
   {
