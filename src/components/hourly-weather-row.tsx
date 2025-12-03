@@ -1,5 +1,6 @@
 import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import { WeatherParameter } from "@/types";
+import WeatherIcon from "./ui/weather-icon";
 
 interface HourlyWeatherRowProps {
   data: { hour: Date; parameters: WeatherParameter[] }[];
@@ -15,6 +16,8 @@ export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
             item.parameters.find((p) => p.name === "Wsymb2")!.values[0]
           );
           const WeatherSymbol = SMHI_WEATHER_SYMBOLS[symbolValue];
+          const hour = new Date(item.hour).getHours();
+
           return (
             <div key={index} className="text-center cursor-default">
               <p className="text-xs font-bold text-text-muted">
@@ -25,9 +28,11 @@ export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
                 })}
               </p>
               <p className="font-bold">{item.parameters[0].values[0]}°</p>
-              <span className="text-text-muted flex justify-center text-2xl">
-                {<WeatherSymbol.icon />}
-              </span>
+              {WeatherSymbol && (
+                <span className="text-text-muted flex justify-center text-2xl">
+                  <WeatherIcon weatherSymbol={WeatherSymbol} hour={hour} />
+                </span>
+              )}
             </div>
           );
         })}

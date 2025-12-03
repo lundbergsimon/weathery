@@ -5,6 +5,7 @@ import HorizontalScrollContainer from "@/components/horizontal-scroll-container"
 import HourlyWeatherRow from "@/components/hourly-weather-row";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import WeatherIcon from "@/components/ui/weather-icon";
 import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
@@ -37,31 +38,35 @@ export default function WeatherPage() {
   if (coords === undefined || weeks === undefined)
     return <ErrorState message="No weather data available." />;
 
-  const currentHour = weeks[0].days[0].hours[0];
-  const currentSymbol = currentHour.parameters.find((p) => p.name === "Wsymb2")!
-    .values[0]!;
-  const IconComponent = SMHI_WEATHER_SYMBOLS[currentSymbol]!;
+  const currentDateString = weeks[0].days[0].hours[0]!;
+  const currentHour = new Date(currentDateString.validTime).getHours();
+  const currentSymbol = currentDateString.parameters.find(
+    (p) => p.name === "Wsymb2"
+  )!.values[0]!;
+  const WeatherSymbol = SMHI_WEATHER_SYMBOLS[currentSymbol]!;
 
   return (
     <>
       <main className="flex flex-col items-center justify-center p-4">
         <div id="content" className="w-full max-w-fit">
-          <Card>
-            <p className="text-text-muted">Current Weather</p>
-            <h1 className="font-bold text-6xl">
-              {`${weeks[0].days[0].hours[0].parameters
-                .find((param) => param.name === "t")
-                ?.values[0].toFixed(0)}°`}
-            </h1>
-            {IconComponent && (
-              <span
-                className="text-text-muted text-3xl"
-                title={IconComponent.label}
-              >
-                <IconComponent.icon />
-              </span>
-            )}
-          </Card>
+          <section>
+            <Card>
+              <p className="text-text-muted">Current Weather</p>
+              <h1 className="font-bold text-6xl">
+                {`${weeks[0].days[0].hours[0].parameters
+                  .find((param) => param.name === "t")
+                  ?.values[0].toFixed(0)}°`}
+              </h1>
+              {WeatherSymbol && (
+                <span className="text-text-muted text-3xl">
+                  <WeatherIcon
+                    weatherSymbol={WeatherSymbol}
+                    hour={currentHour}
+                  />
+                </span>
+              )}
+            </Card>
+          </section>
           <section
             id="day-list"
             className="flex flex-col gap-4 pt-4 justify-center max-w-fit min-w-0"
