@@ -1,5 +1,7 @@
 import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import { WeatherParameter } from "@/types";
+import clsx from "clsx";
+import { WiDirectionUp } from "react-icons/wi";
 import WeatherIcon from "./ui/weather-icon";
 
 interface HourlyWeatherRowProps {
@@ -17,6 +19,8 @@ export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
           );
           const WeatherSymbol = SMHI_WEATHER_SYMBOLS[symbolValue];
           const hour = new Date(item.hour).getHours();
+          const windDirection = item.parameters.find((p) => p.name === "wd")!.values[0];
+          const windSpeed = item.parameters.find((p) => p.name === "ws")!.values[0];
 
           return (
             <div key={index} className="text-center cursor-default">
@@ -33,6 +37,18 @@ export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
                   <WeatherIcon weatherSymbol={WeatherSymbol} hour={hour} />
                 </span>
               )}
+              <span className={`text-text-muted flex justify-center text-2xl`}>
+                <WiDirectionUp
+                  style={{
+                    rotate: `${windDirection}deg`
+                  }}
+                  title={`${windDirection} degrees`}
+                  aria-label={`Wind direction`}
+                />
+              </span>
+              <span className="text-text-muted flex justify-center text-xs">
+                {windSpeed} m/s
+              </span>
             </div>
           );
         })}
