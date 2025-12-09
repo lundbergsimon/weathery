@@ -1,6 +1,8 @@
 # Weather App in Next.js
 This is a weather app built with Next.js with weather data retrieved from the SMHI public API. The app is optimized for mobile and desktop viewing with a dynamic TailwindCSS styling.
 
+Check it out at [weathery-five.vercel.app](https://weathery-five.vercel.app/).
+
 ## Technologies Used
 
 * Next.js
