@@ -3,7 +3,7 @@ This is a weather app built with Next.js with weather data retrieved from the SM
 
 ## Technologies Used
 
-* Next.js for server-side rendering and static site generation
+* Next.js
 * SMHI public API
 * TailwindCSS
 
