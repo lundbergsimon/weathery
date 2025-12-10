@@ -2,8 +2,8 @@
 
 import CurrentWeatherCard from "@/components/current-weather-card";
 import DayWeatherComponent from "@/components/day-weather-component";
-import ErrorState from "@/components/ui/ErrorState";
-import LoadingState from "@/components/ui/LoadingState";
+import ErrorState from "@/components/ui/error-state";
+import LoadingState from "@/components/ui/loading-state";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
 
