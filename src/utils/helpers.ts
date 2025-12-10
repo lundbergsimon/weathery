@@ -2,24 +2,52 @@ import { WeatherDay, WeatherHour, WeatherWeek } from "@/types";
 
 /**
  * Calculates the ISO-standard week key (the date of the Monday of that week).
- * @param date - A Date object.
+ *
+ * @param utcDate - A UTC Date object.
+ * @param timeZone - The target timezone to use for the date.
  * @returns A date string in 'YYYY-MM-DD' format for the Monday of the week.
  */
-const getStartOfWeek = (dateString: Date): string => {
-  const date = new Date(dateString);
-  // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-  const localDayIndex = date.getDay() === 0 ? 6 : date.getDay() - 1;
-  // Get the current date
-  const monday = new Date(date);
-  // Subtract the number of days past Monday
-  monday.setDate(date.getDate() - localDayIndex);
-
-  // Format as YYYY-MM-DD using ISO string to ensure consistency
-  return monday.toLocaleDateString("sv-SE", {
+const getStartOfWeekDateString = (
+  utcDate: Date,
+  timeZone: string = "Europe/Stockholm"
+): string => {
+  // Convert UTC date to target timezone
+  const formatter = new Intl.DateTimeFormat("sv-SE", {
+    timeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
   });
+  const parts = formatter.formatToParts(utcDate);
+  const values = Object.fromEntries(
+    parts.map(({ type, value }) => [type, value])
+  );
+
+  // Create a date in the target timezone
+  const targetDate = new Date(
+    `${values.year}-${values.month}-${values.day}T${values.hour}:${values.minute}:${values.second}`
+  );
+
+  // Get the day of the week for target date. 0-6 (Sunday-Saturday)
+  const dayOfWeek = targetDate.getDay();
+
+  // Calculate days to subtract to get to Monday. 0-6 (Monday-Sunday)
+  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+  // Get Monday date
+  const monday = new Date(targetDate);
+  monday.setDate(monday.getDate() - daysToMonday);
+
+  // Format as YYYY-MM-DD
+  const year = monday.getFullYear();
+  const month = String(monday.getMonth() + 1).padStart(2, "0");
+  const day = String(monday.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 };
 
 /**
@@ -27,20 +55,23 @@ const getStartOfWeek = (dateString: Date): string => {
  * Returns an array of WeatherWeek objects where each week object contains
  * an array of WeatherDay objects. Each WeatherDay object contains an array
  * of WeatherHour objects.
+ *
  * @param hourlyData - An array of WeatherHour objects.
+ * @param timeZone - The target timezone to use for the date.
  * @returns An array of WeatherWeek objects.
  */
-export const groupByWeekAndDay = (hourlyData: WeatherHour[]): WeatherWeek[] => {
+export const groupByWeekAndDay = (
+  hourlyData: WeatherHour[],
+  timeZone: string = "Europe/Stockholm"
+): WeatherWeek[] => {
   // Map to hold the intermediate structure for efficient access and insertion:
   const groupedDataMap = hourlyData.reduce((acc, currentHour) => {
     // Convert the string timestamp to a Date object
     const utcDate = new Date(currentHour.validTime);
 
     // 1. Calculate the Grouping Keys
-    const weekKey = getStartOfWeek(utcDate);
-    const localDateNum: number = utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000;
-    const localDate: Date = new Date(localDateNum);
-    const dayKey = localDate.toISOString().split("T")[0];
+    const weekKey = getStartOfWeekDateString(utcDate); // YYYY-MM-DD
+    const dayKey = utcDate.toLocaleDateString("sv-SE", { timeZone }); // YYYY-MM-DD
 
     // 2. Initialize the Week Group if it doesn't exist
     if (!acc.has(weekKey)) {
