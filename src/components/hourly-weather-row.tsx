@@ -1,6 +1,5 @@
 import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import { WeatherParameter } from "@/types";
-import clsx from "clsx";
 import { WiDirectionUp } from "react-icons/wi";
 import WeatherIcon from "./ui/weather-icon";
 
