@@ -6,13 +6,10 @@ import HorizontalScrollContainer from "@/components/horizontal-scroll-container"
 import HourlyWeatherRow from "@/components/hourly-weather-row";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
-import WeatherIcon from "@/components/ui/weather-icon";
-import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
-import { WeatherDay, WeatherHour } from "@/types/index";
+import { WeatherDay } from "@/types/index";
 import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
-import { WiDirectionUp } from "react-icons/wi";
 
 /**
  * A page that displays the current weather data for a given location.
