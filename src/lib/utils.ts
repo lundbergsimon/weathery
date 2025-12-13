@@ -1,4 +1,4 @@
-import { WeatherParameter } from "@/types";
+import { WeatherHour, WeatherParameter } from "@/types";
 
 /**
  * Returns the first value of a WeatherParameter with the given name.
@@ -7,12 +7,35 @@ import { WeatherParameter } from "@/types";
  * this function returns null.
  */
 export const getParameterValue = (
-  parameters: WeatherParameter[],
+  parameters: WeatherParameter[] | undefined,
   name: string
-): number | null => {
+) => {
+  if (!Array.isArray(parameters)) {
+    console.warn("Invalid parameters array passed to getParameterValue");
+    return null;
+  }
+
   const param = parameters.find((p) => p.name === name);
   if (!param || param.values.length === 0) {
+    console.warn(`No parameter with name "${name}" found`);
     return null;
   }
   return param.values[0];
+};
+
+/**
+ * Returns an object with the minimum and maximum temperatures from an array of WeatherHour objects.
+ *
+ * If no valid temperatures are found, the function returns an object with both min and max set to null.
+ */
+export const getMinMaxTemperature = (hours: WeatherHour[]) => {
+  let min: number | null = null;
+  let max: number | null = null;
+  hours.forEach((hour) => {
+    const temp = getParameterValue(hour.parameters, "t");
+    if (temp === null) return;
+    if (min === null || temp < min) min = temp;
+    if (max === null || temp > max) max = temp;
+  });
+  return { min, max };
 };
