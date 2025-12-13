@@ -1,3 +1,4 @@
+import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
 import { WeatherHour, WeatherParameter } from "@/types";
 
 /**
@@ -22,6 +23,11 @@ export const getParameterValue = (
   }
   return param.values[0];
 };
+
+export const getWeatherSymbol = (parameters: WeatherParameter[]) => {
+  const symbolValue = getParameterValue(parameters, "Wsymb2");
+  return symbolValue ? SMHI_WEATHER_SYMBOLS[symbolValue] : null;
+}
 
 /**
  * Returns an object with the minimum and maximum temperatures from an array of WeatherHour objects.
