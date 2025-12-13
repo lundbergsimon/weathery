@@ -1,3 +1,4 @@
+import { getMinMaxTemperature } from "@/lib/utils";
 import { WeatherDay } from "@/types";
 import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
 import Card from "./card";
@@ -9,27 +10,20 @@ interface DayWeatherComponentProps {
 }
 
 export default function DayWeatherComponent({ day }: DayWeatherComponentProps) {
-  const temperatureLow = day.hours.reduce(
-    (acc, hour) =>
-      Math.min(acc, hour.parameters.find((p) => p.name === "t")!.values[0]!),
-    Infinity
-  );
-  const temperatureHigh = day.hours.reduce(
-    (acc, hour) =>
-      Math.max(acc, hour.parameters.find((p) => p.name === "t")!.values[0]!),
-    -Infinity
-  );
+  const tempRange = getMinMaxTemperature(day.hours);
 
   return (
-    <div className="" key={day.date}>
+    <div key={day.date}>
       <h2 className="text-2xl font-bold mb-1 px-1 flex justify-between">
         <span>{displayWeekDay(day)}</span>
         <span>{displayMonthDay(day)}</span>
       </h2>
       <Card>
-        <div className="text-text-main text-lg mb-4">
-          {temperatureLow.toFixed(0)}° / {temperatureHigh.toFixed(0)}°
-        </div>
+        {tempRange.min && tempRange.max && (
+          <div className="text-text-main text-lg mb-4">
+            {`${tempRange.min}° / ${tempRange.max}°`}
+          </div>
+        )}
         <HorizontalScrollContainer>
           <HourlyWeatherRow
             data={day.hours.map((hour) => ({
