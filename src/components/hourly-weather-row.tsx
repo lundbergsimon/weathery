@@ -34,7 +34,7 @@ export default function HourlyWeatherRow({
               {/* Parameters */}
               <div className="flex flex-col">
                 <div className="font-bold">
-                  {temperature !== null ? temperature : NaN}°
+                  {temperature !== undefined ? temperature : NaN}°
                 </div>
                 {weatherSymbol && (
                   <div className="text-text-muted flex justify-center text-2xl">
