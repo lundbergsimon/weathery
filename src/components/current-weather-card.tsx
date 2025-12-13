@@ -1,4 +1,5 @@
 import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
+import { getParameterValue } from "@/lib/utils";
 import { WeatherHour } from "@/types";
 import { WiDirectionUp } from "react-icons/wi";
 import Card from "./card";
@@ -10,18 +11,13 @@ interface CurrentWeatherCardProps {
 
 export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
   const currentHour = new Date(data.validTime).getHours();
-  const currentSymbol = data.parameters.find((p) => p.name === "Wsymb2")!
-    .values[0]!;
-  const WeatherSymbol = SMHI_WEATHER_SYMBOLS[currentSymbol]!;
+  const currentSymbol = getParameterValue(data.parameters, "Wsymb2");
+  const WeatherSymbol = currentSymbol && SMHI_WEATHER_SYMBOLS[currentSymbol];
 
-  const temperature = data.parameters
-    .find((p) => p.name === "t")!
-    .values[0].toFixed(0);
-  const windSpeed = data.parameters
-    .find((p) => p.name === "ws")!
-    .values[0].toFixed(0);
-  const windDirection = data.parameters.find((p) => p.name === "wd")!.values[0];
-  const humidity = data.parameters.find((p) => p.name === "r")!.values[0];
+  const temperature = getParameterValue(data.parameters, "t")?.toFixed(0);
+  const windSpeed = getParameterValue(data.parameters, "ws")?.toFixed(0);
+  const windDirection = getParameterValue(data.parameters, "wd")?.toFixed(0);
+  const humidity = getParameterValue(data.parameters, "r")?.toFixed(0);
 
   return (
     <Card>
