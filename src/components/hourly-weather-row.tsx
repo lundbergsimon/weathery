@@ -29,7 +29,7 @@ export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
               <p className="text-xs font-bold text-text-muted">{hour24}</p>
               {/* Parameters */}
               <div className="flex flex-col">
-                <div className="font-bold">{temperature || NaN}°</div>
+                <div className="font-bold">{temperature === null || NaN}°</div>
                 {weatherSymbol && (
                   <div className="text-text-muted flex justify-center text-2xl">
                     <WeatherIcon weatherSymbol={weatherSymbol} hour={hour} />
