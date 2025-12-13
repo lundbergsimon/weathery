@@ -24,7 +24,7 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
       <p className="text-text-muted">Current Weather</p>
       <div className="flex">
         <h1 className="font-bold text-6xl pr-[10%]">
-          {temperature === null || NaN}°
+          {temperature !== null ? temperature : NaN}°
         </h1>
         <div className="text-text-muted">
           <div className="flex items-center">
