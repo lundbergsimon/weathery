@@ -1,4 +1,4 @@
-import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
+import { getParameterValue, getWeatherSymbol } from "@/lib/utils";
 import { WeatherParameter } from "@/types";
 import { WiDirectionUp } from "react-icons/wi";
 import WeatherIcon from "./ui/weather-icon";
@@ -13,13 +13,11 @@ export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
       {/* Display each hour horizontally */}
       <div className="flex gap-4">
         {data.map((item, index) => {
-          const symbolValue = Number(
-            item.parameters.find((p) => p.name === "Wsymb2")!.values[0]
-          );
-          const WeatherSymbol = SMHI_WEATHER_SYMBOLS[symbolValue];
           const hour = new Date(item.hour).getHours();
-          const windDirection = item.parameters.find((p) => p.name === "wd")!.values[0];
-          const windSpeed = item.parameters.find((p) => p.name === "ws")!.values[0];
+          const weatherSymbol = getWeatherSymbol(item.parameters);
+          const temperature = getParameterValue(item.parameters, "t");
+          const windDirection = getParameterValue(item.parameters, "wd");
+          const windSpeed = getParameterValue(item.parameters, "ws");
 
           return (
             <div key={index} className="text-center cursor-default">
@@ -30,16 +28,16 @@ export default function HourlyWeatherRow({ data }: HourlyWeatherRowProps) {
                   minute: "numeric",
                 })}
               </p>
-              <p className="font-bold">{item.parameters[0].values[0]}°</p>
-              {WeatherSymbol && (
+              <p className="font-bold">{temperature || NaN}°</p>
+              {weatherSymbol && (
                 <span className="text-text-muted flex justify-center text-2xl">
-                  <WeatherIcon weatherSymbol={WeatherSymbol} hour={hour} />
+                  <WeatherIcon weatherSymbol={weatherSymbol} hour={hour} />
                 </span>
               )}
               <span className={`text-text-muted flex justify-center text-2xl`}>
                 <WiDirectionUp
                   style={{
-                    rotate: `${windDirection}deg`
+                    rotate: `${windDirection}deg`,
                   }}
                   title={`${windDirection} degrees`}
                   aria-label={`Wind direction`}
