@@ -11,12 +11,9 @@ interface DayWeatherComponentProps {
 
 export default function DayWeatherComponent({ day }: DayWeatherComponentProps) {
   const { min: minTemp, max: maxTemp } = getMinMaxTemperature(day.hours);
-  const formattedData = day.hours.map((hour) => ({
-    hour: new Date(hour.validTime),
-    parameters: hour.parameters.map((param) => ({
-      ...param,
-      values: param.values.map((value) => Number(value.toFixed(0))),
-    })),
+  const formattedHourlyData = day.hours.map((hour) => ({
+    dateTimeHour: hour.validTime,
+    ...hour,
   }));
 
   return (
@@ -32,7 +29,7 @@ export default function DayWeatherComponent({ day }: DayWeatherComponentProps) {
           </div>
         )}
         <HorizontalScrollContainer>
-          <HourlyWeatherRow data={formattedData} />
+          <HourlyWeatherRow hourlyData={formattedHourlyData} />
         </HorizontalScrollContainer>
       </Card>
     </div>
