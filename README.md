@@ -5,6 +5,7 @@ Check it out at [weathery-five.vercel.app](https://weathery-five.vercel.app/).
 
 ## Technologies Used
 
+* React
 * Next.js
 * SMHI public API
 * TailwindCSS
