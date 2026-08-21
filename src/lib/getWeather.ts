@@ -23,7 +23,7 @@ export async function getWeather(
 
   const formatedData = groupByWeekAndDay(data.timeSeries);
 
-  return formatedData;
+  return formattedData;
 }
 
 export async function getWeatherRaw(
