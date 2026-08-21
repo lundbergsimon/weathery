@@ -2,7 +2,7 @@ import { SMHIWeatherData, WeatherWeek } from "@/types";
 import { groupByWeekAndDay } from "@/utils/helpers";
 
 const BASE_URL =
-  "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point";
+  "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1/geotype/point";
 
 /**
  * Fetches weather data from the SMHI API for a given latitude and longitude.
@@ -21,7 +21,7 @@ export async function getWeather(
 ): Promise<WeatherWeek[]> {
   const data = await getWeatherRaw(longitude, latitude);
 
-  const formatedData = groupByWeekAndDay(data.timeSeries);
+  const formattedData = groupByWeekAndDay(data.timeSeries);
 
   return formattedData;
 }
