@@ -1,8 +1,9 @@
-import { WeatherHour } from "@/types";
+import { WeatherHour as IWeatherHour } from "@/types";
 import clsx from "clsx";
+import WeatherHour from "../WeatherHour/WeatherHour";
 
 interface WeatherHourListProps {
-  hours?: WeatherHour[];
+  hours?: IWeatherHour[];
   screenSize: string;
 }
 
@@ -14,7 +15,7 @@ export default function WeatherHourList({
   hours,
   screenSize,
 }: WeatherHourListProps) {
-  const allHours: WeatherHour[] = Array(24).fill(null);
+  const allHours: IWeatherHour[] = Array(24).fill(null);
 
   hours?.forEach((hour) => {
     const hourIndex = new Date(hour.time).getUTCHours();

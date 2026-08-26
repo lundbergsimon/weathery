@@ -10,7 +10,7 @@ interface CurrentWeatherCardProps {
 }
 
 export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
-  const currentHour = new Date(data.validTime).getHours();
+  const currentHour = new Date(data.time).getHours();
   const currentSymbol = getParameterValue(data.parameters, "Wsymb2");
   const WeatherSymbol = currentSymbol && SMHI_WEATHER_SYMBOLS[currentSymbol];
 
