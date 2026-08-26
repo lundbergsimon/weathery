@@ -1,4 +1,6 @@
 import { SMHIWeatherData, WeatherWeek } from "@/types";
+import { ApiMapper } from "@/types/ApiMapper";
+import { Snow1gMapper } from "@/types/mappers/Snow1gMapper";
 import { groupByWeekAndDay } from "@/utils/helpers";
 
 const BASE_URL =
@@ -17,18 +19,19 @@ const BASE_URL =
  */
 export async function getWeather(
   longitude: number,
-  latitude: number
+  latitude: number,
 ): Promise<WeatherWeek[]> {
-  const data = await getWeatherRaw(longitude, latitude);
+  const data: SMHIWeatherData = await getWeatherRaw(longitude, latitude);
 
-  const formattedData = groupByWeekAndDay(data.timeSeries);
+  const formattedData: WeatherWeek[] = groupByWeekAndDay(data.timeSeries);
 
   return formattedData;
 }
 
 export async function getWeatherRaw(
   longitude: number,
-  latitude: number
+  latitude: number,
+  mapper: ApiMapper = new Snow1gMapper(),
 ): Promise<SMHIWeatherData> {
   const lon = longitude.toFixed(2);
   const lat = latitude.toFixed(2);
@@ -40,7 +43,7 @@ export async function getWeatherRaw(
     throw new Error("SMHI API request failed");
   }
 
-  const data: SMHIWeatherData = await res.json();
+  const raw: SMHIWeatherData = await res.json();
 
-  return data;
+  return mapper.map(raw);
 }

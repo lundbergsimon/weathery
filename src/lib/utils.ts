@@ -9,7 +9,7 @@ import { WeatherHour, WeatherParameter } from "@/types";
  */
 export const getParameterValue = (
   parameters: WeatherParameter[] | undefined,
-  name: string
+  name: string,
 ) => {
   if (!Array.isArray(parameters)) {
     console.warn("Invalid parameters array passed to getParameterValue");
@@ -27,7 +27,7 @@ export const getParameterValue = (
 export const getWeatherSymbol = (parameters: WeatherParameter[]) => {
   const symbolValue = getParameterValue(parameters, "Wsymb2");
   return symbolValue ? SMHI_WEATHER_SYMBOLS[symbolValue] : null;
-}
+};
 
 /**
  * Returns an object with the minimum and maximum temperatures from an array of WeatherHour objects.

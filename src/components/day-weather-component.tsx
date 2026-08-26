@@ -12,7 +12,7 @@ interface DayWeatherComponentProps {
 export default function DayWeatherComponent({ day }: DayWeatherComponentProps) {
   const { min: minTemp, max: maxTemp } = getMinMaxTemperature(day.hours);
   const formattedHourlyData = day.hours.map((hour) => ({
-    dateTimeHour: hour.validTime,
+    dateTimeHour: hour.time,
     ...hour,
   }));
 

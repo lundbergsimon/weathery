@@ -1,5 +1,3 @@
-
-
 export interface SMHIWeatherDataParameter {
   parameter: string;
   shortName: string;

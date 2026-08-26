@@ -1,9 +1,8 @@
-import { WeatherHour as IWeatherHour } from "@/types";
+import { WeatherHour } from "@/types";
 import clsx from "clsx";
-import WeatherHour from "../WeatherHour/WeatherHour";
 
 interface WeatherHourListProps {
-  hours?: IWeatherHour[];
+  hours?: WeatherHour[];
   screenSize: string;
 }
 
@@ -15,10 +14,10 @@ export default function WeatherHourList({
   hours,
   screenSize,
 }: WeatherHourListProps) {
-  const allHours: IWeatherHour[] = Array(24).fill(null);
+  const allHours: WeatherHour[] = Array(24).fill(null);
 
   hours?.forEach((hour) => {
-    const hourIndex = new Date(hour.validTime).getUTCHours();
+    const hourIndex = new Date(hour.time).getUTCHours();
     allHours[hourIndex] = hour;
   });
 
@@ -27,7 +26,7 @@ export default function WeatherHourList({
       className={clsx(
         "gap-1 lg:grid lg:grid-cols-12 flex flex-col",
         screenSize === "large" &&
-          "grid grid-cols-12 gap-2 transition-all ease-in-out duration-500 mt-2"
+          "grid grid-cols-12 gap-2 transition-all ease-in-out duration-500 mt-2",
       )}
     >
       {allHours &&

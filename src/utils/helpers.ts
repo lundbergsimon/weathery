@@ -9,7 +9,7 @@ import { WeatherDay, WeatherHour, WeatherWeek } from "@/types";
  */
 const getStartOfWeekDateString = (
   utcDate: Date,
-  timeZone: string = "Europe/Stockholm"
+  timeZone: string = "Europe/Stockholm",
 ): string => {
   // Convert UTC date to target timezone
   const formatter = new Intl.DateTimeFormat("sv-SE", {
@@ -24,12 +24,12 @@ const getStartOfWeekDateString = (
   });
   const parts = formatter.formatToParts(utcDate);
   const values = Object.fromEntries(
-    parts.map(({ type, value }) => [type, value])
+    parts.map(({ type, value }) => [type, value]),
   );
 
   // Create a date in the target timezone
   const targetDate = new Date(
-    `${values.year}-${values.month}-${values.day}T${values.hour}:${values.minute}:${values.second}`
+    `${values.year}-${values.month}-${values.day}T${values.hour}:${values.minute}:${values.second}`,
   );
 
   // Get the day of the week for target date. 0-6 (Sunday-Saturday)
@@ -62,12 +62,15 @@ const getStartOfWeekDateString = (
  */
 export const groupByWeekAndDay = (
   hourlyData: WeatherHour[],
-  timeZone: string = "Europe/Stockholm"
+  timeZone: string = "Europe/Stockholm",
 ): WeatherWeek[] => {
   // Map to hold the intermediate structure for efficient access and insertion:
   const groupedDataMap = hourlyData.reduce((acc, currentHour) => {
     // Convert the string timestamp to a Date object
-    const utcDate = new Date(currentHour.validTime);
+    const utcDate = new Date(currentHour.time);
+    if (!(utcDate instanceof Date)) {
+      throw new Error("Not a valid Date!");
+    }
 
     // 1. Calculate the Grouping Keys
     const weekKey = getStartOfWeekDateString(utcDate); // YYYY-MM-DD
@@ -108,7 +111,7 @@ export const groupByWeekAndDay = (
 
     // Sort days within the week to ensure Monday comes before Tuesday, etc.
     dailyGroups.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
 
     finalResult.push({
@@ -120,7 +123,7 @@ export const groupByWeekAndDay = (
   // Sort weeks chronologically
   finalResult.sort(
     (a, b) =>
-      new Date(a.weekStartDate).getTime() - new Date(b.weekStartDate).getTime()
+      new Date(a.weekStartDate).getTime() - new Date(b.weekStartDate).getTime(),
   );
 
   return finalResult;
@@ -140,7 +143,7 @@ export function getThisMonthDates(): Date[] {
 
   return Array.from(
     { length: daysInMonth },
-    (_, i = 1) => new Date(year, month, i + 1)
+    (_, i = 1) => new Date(year, month, i + 1),
   );
 }
 

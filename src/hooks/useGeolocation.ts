@@ -29,7 +29,7 @@ export default function useGeoLocation() {
       (err) => {
         setError("Failed to get location. " + err.message);
         setLoading(false);
-      }
+      },
     );
   }, []);
 

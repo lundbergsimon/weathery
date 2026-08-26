@@ -27,7 +27,7 @@ export default function useWeather(lat?: number, lon?: number) {
 
         setWeather(data);
       } catch (err) {
-        setError("Failed to fetch weather data." + err);
+        setError("Failed to fetch data from SMHI!");
       } finally {
         setLoading(false);
       }

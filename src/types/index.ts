@@ -62,24 +62,24 @@ export type WeatherParameter = {
   name: WeatherParameterName;
   unit: WeatherParameterUnit;
   values: number[];
-}
+};
 
 export type WeatherHour = {
-  validTime: string;
+  time: string;
   parameters: WeatherParameter[];
-}
+};
 
 export type Geometry = {
   type: string;
   coordinates: number[];
-}
+};
 
 export type SMHIWeatherData = {
   approvedTime: string;
   referenceTime: string;
   geometry: Geometry;
   timeSeries: WeatherHour[];
-}
+};
 
 /* -------------------------------------------------------------------------- */
 /*                                  Formatted                                 */
@@ -88,7 +88,7 @@ export type SMHIWeatherData = {
 export type WeatherDay = {
   date: string;
   hours: WeatherHour[];
-}
+};
 
 export interface WeatherWeek {
   weekStartDate: string;

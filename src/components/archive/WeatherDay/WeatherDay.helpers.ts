@@ -10,7 +10,7 @@ export const getAverageTemperature = (timeSeries: WeatherHour[]): number =>
   timeSeries.reduce(
     (acc, hour) =>
       acc + hour.parameters.find((param) => param.name === "t")!.values[0],
-    0
+    0,
   ) / timeSeries.length;
 
 /**
@@ -34,7 +34,7 @@ export const getWeekDay = (date: string, language = "en-US"): string =>
  */
 export const getDayAndMonth = (
   date: string,
-  language: string = "en-US"
+  language: string = "en-US",
 ): string =>
   new Date(date).toLocaleDateString(language, {
     month: "short",
@@ -54,7 +54,7 @@ export const getLowestTemperature = (timeSeries: WeatherHour[]): number =>
       acc < hour.parameters.find((param) => param.name === "t")!.values[0]
         ? acc
         : hour.parameters.find((param) => param.name === "t")!.values[0],
-    Infinity
+    Infinity,
   );
 
 /**
@@ -69,7 +69,7 @@ export const getHighestTemperature = (timeSeries: WeatherHour[]): number =>
       acc > hour.parameters.find((param) => param.name === "t")!.values[0]
         ? acc
         : hour.parameters.find((param) => param.name === "t")!.values[0],
-    -Infinity
+    -Infinity,
   );
 
 /**
@@ -82,7 +82,7 @@ export const getAverageWindSpeed = (timeSeries: WeatherHour[]): number =>
   timeSeries.reduce(
     (acc, hour) =>
       acc + hour.parameters.find((param) => param.name === "ws")!.values[0],
-    0
+    0,
   ) / timeSeries.length;
 
 /**
@@ -95,5 +95,5 @@ export const getAverageRelativeHumidity = (timeSeries: WeatherHour[]): number =>
   timeSeries.reduce(
     (acc, hour) =>
       acc + hour.parameters.find((param) => param.name === "r")!.values[0],
-    0
+    0,
   ) / timeSeries.length;
