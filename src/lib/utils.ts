@@ -43,5 +43,5 @@ export const getMinMaxTemperature = (hours: WeatherHour[]) => {
     if (min === null || temp < min) min = temp;
     if (max === null || temp > max) max = temp;
   });
-  return { min, max };
+  return { minTemp: min, maxTemp: max };
 };

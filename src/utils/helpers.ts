@@ -4,34 +4,9 @@ import { WeatherDay, WeatherHour, WeatherWeek } from "@/types";
  * Calculates the ISO-standard week key (the date of the Monday of that week).
  *
  * @param utcDate - A UTC Date object.
- * @param timeZone - The target timezone to use for the date.
  * @returns A date string in 'YYYY-MM-DD' format for the Monday of the week.
  */
-const getStartOfWeekDateString = (
-  utcDate: Date,
-  timeZone: string = "Europe/Stockholm",
-): string => {
-  // Convert UTC date to target timezone
-  const formatter = new Intl.DateTimeFormat("sv-SE", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-  const parts = formatter.formatToParts(utcDate);
-  const values = Object.fromEntries(
-    parts.map(({ type, value }) => [type, value]),
-  );
-
-  // Create a date in the target timezone
-  const targetDate = new Date(
-    `${values.year}-${values.month}-${values.day}T${values.hour}:${values.minute}:${values.second}`,
-  );
-
+const getStartOfWeekDateString = (targetDate: Date): string => {
   // Get the day of the week for target date. 0-6 (Sunday-Saturday)
   const dayOfWeek = targetDate.getDay();
 
@@ -73,18 +48,18 @@ export const groupByWeekAndDay = (
     }
 
     // 1. Calculate the Grouping Keys
-    const weekKey = getStartOfWeekDateString(utcDate); // YYYY-MM-DD
+    const weekStartDate = getStartOfWeekDateString(utcDate); // YYYY-MM-DD
     const dayKey = utcDate.toLocaleDateString("sv-SE", { timeZone }); // YYYY-MM-DD
 
     // 2. Initialize the Week Group if it doesn't exist
-    if (!acc.has(weekKey)) {
-      acc.set(weekKey, {
-        weekStartDate: weekKey,
+    if (!acc.has(weekStartDate)) {
+      acc.set(weekStartDate, {
+        weekStartDate,
         daysMap: new Map<string, WeatherDay>(), // Use an inner Map for days
       });
     }
 
-    const weekGroup = acc.get(weekKey)!;
+    const weekGroup = acc.get(weekStartDate)!;
 
     // 3. Initialize the Day Group if it doesn't exist
     if (!weekGroup.daysMap.has(dayKey)) {
@@ -96,7 +71,10 @@ export const groupByWeekAndDay = (
     }
 
     // 4. Add the current hourly data object to the correct day group
-    weekGroup.daysMap.get(dayKey)!.hours.push(currentHour);
+    weekGroup.daysMap.get(dayKey)!.hours.push({
+      time: currentHour.time, // utc date string
+      parameters: currentHour.parameters,
+    });
 
     return acc;
   }, new Map<string, { weekStartDate: string; daysMap: Map<string, WeatherDay> }>());
@@ -147,6 +125,13 @@ export function getThisMonthDates(): Date[] {
   );
 }
 
+/**
+ * Returns "Today" if it is today else it returns the week day e.g.,
+ * "Monday".
+ *
+ * @param day WeatherDay type
+ * @returns
+ */
 export const displayWeekDay = (day: WeatherDay) =>
   day.date === new Date().toISOString().slice(0, 10)
     ? "Today"
