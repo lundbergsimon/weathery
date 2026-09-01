@@ -8,7 +8,7 @@ type IHourDate = WeatherHour & {
 };
 
 interface HourlyWeatherRowProps {
-  hourlyData: WeatherHour[];
+  hourlyData: WeatherHour[]; // Hourly weather data for a specific day
 }
 
 export default function HourlyWeatherRow({
