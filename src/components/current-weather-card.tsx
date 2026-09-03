@@ -23,13 +23,13 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
     <Card>
       <p className="text-text-muted">Current Weather</p>
       <div className="flex">
-        <h1 className="font-bold text-6xl pr-[10%]">
-          {temperature !== undefined ? temperature : NaN}°
-        </h1>
+        <h1 className="font-bold text-6xl pr-[10%]">{temperature ?? "--"}°</h1>
         <div className="text-text-muted">
           <div className="flex items-center">
             <span className="mr-1">Wind: </span>
-            <span className="text-text-main font-bold">{windSpeed} m/s</span>
+            <span className="text-text-main font-bold">
+              {windSpeed ?? "--"} m/s
+            </span>
             <WiDirectionUp
               className="inline text-text-main"
               size={30}
