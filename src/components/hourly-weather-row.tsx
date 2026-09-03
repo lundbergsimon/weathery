@@ -14,12 +14,8 @@ interface HourlyWeatherRowProps {
 export default function HourlyWeatherRow({
   hourlyData,
 }: HourlyWeatherRowProps) {
-  const allHours: IHourDate[] = Array.from({ length: 24 }, (_, index) => ({
-    hour: index, // 0 = 00:00, 23 = 23:00
-    time: "",
-    parameters: [],
-  }));
-
+  // Create an array of 24 hours, filling in the data for each hour if available
+  const allHours: (IHourDate | null)[] = Array.from({ length: 24 }, () => null);
   hourlyData?.forEach((hour) => {
     const hourIndex = new Date(hour.time).getHours();
     allHours[hourIndex] = { hour: hourIndex, ...hour };
@@ -29,22 +25,22 @@ export default function HourlyWeatherRow({
     <div className="pb-4">
       {/* Display each hour horizontally */}
       <div className="flex gap-4 [&>*]:flex-1">
-        {allHours.map((item, index) => {
-          const weatherSymbol = item.time && getWeatherSymbol(item.parameters);
+        {allHours.map((item, hourIndex) => {
+          const weatherSymbol = item && getWeatherSymbol(item.parameters);
           const temperature =
-            item.time && getParameterValue(item.parameters, "t")?.toFixed(0);
-          const windDirection = item.time
+            item && getParameterValue(item.parameters, "t")?.toFixed(0);
+          const windDirection = item
             ? (getParameterValue(item.parameters, "wd") as number)
             : NaN;
-          const windSpeed =
-            item.time && getParameterValue(item.parameters, "ws");
-          const hour24 = item.hour > 9 ? `${item.hour}:00` : `0${item.hour}:00`;
+          const windSpeed = item && getParameterValue(item.parameters, "ws");
+          const hourStr =
+            hourIndex > 9 ? `${hourIndex}:00` : `0${hourIndex}:00`;
 
           return (
-            <div key={index} className="text-center cursor-default">
-              <p className="text-xs font-bold text-text-muted">{hour24}</p>
+            <div key={hourIndex} className="text-center cursor-default">
+              <p className="text-xs font-bold text-text-muted">{hourStr}</p>
               {/* Parameters */}
-              {item.time && (
+              {item && (
                 <div className="flex flex-col">
                   <div className="font-bold">
                     {temperature !== undefined ? temperature : NaN}°
@@ -53,7 +49,7 @@ export default function HourlyWeatherRow({
                     <div className="text-text-muted flex justify-center text-2xl">
                       <WeatherIcon
                         weatherSymbol={weatherSymbol}
-                        hour={index + 1}
+                        hour={hourIndex}
                       />
                     </div>
                   )}
