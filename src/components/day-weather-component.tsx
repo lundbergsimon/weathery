@@ -1,4 +1,4 @@
-import { getMinMaxTemperature } from "@/lib/utils";
+import { getMinMaxTemperature } from "@/utils/getMinMaxTemperature";
 import { WeatherDay } from "@/types";
 import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
 import Card from "./card";

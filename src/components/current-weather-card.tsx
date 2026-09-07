@@ -1,9 +1,9 @@
 import { SMHI_WEATHER_SYMBOLS } from "@/constants/mesan";
-import { getParameterValue } from "@/lib/utils";
 import { WeatherHour } from "@/types";
 import { WiDirectionUp } from "react-icons/wi";
 import Card from "./card";
 import WeatherIcon from "./ui/weather-icon";
+import { getParameterValue } from "@/utils/getParameterValue";
 
 interface CurrentWeatherCardProps {
   data: WeatherHour;

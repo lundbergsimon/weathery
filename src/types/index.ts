@@ -69,18 +69,6 @@ export type WeatherHour = {
   parameters: WeatherParameter[];
 };
 
-export type Geometry = {
-  type: string;
-  coordinates: number[];
-};
-
-export type SMHIWeatherData = {
-  approvedTime: string;
-  referenceTime: string;
-  geometry: Geometry;
-  timeSeries: WeatherHour[];
-};
-
 /* -------------------------------------------------------------------------- */
 /*                                  Formatted                                 */
 /* -------------------------------------------------------------------------- */

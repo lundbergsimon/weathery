@@ -1,7 +1,8 @@
-import { getParameterValue, getWeatherSymbol } from "@/lib/utils";
 import { WeatherHour } from "@/types";
 import { WiDirectionUp } from "react-icons/wi";
 import WeatherIcon from "./ui/weather-icon";
+import { getWeatherSymbol } from "@/utils/getWeatherSymbol";
+import { getParameterValue } from "@/utils/getParameterValue";
 
 type IHourDate = WeatherHour & {
   hour: number;
