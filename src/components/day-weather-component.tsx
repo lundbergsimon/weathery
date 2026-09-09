@@ -1,6 +1,6 @@
-import { getMinMaxTemperature } from "@/utils/getMinMaxTemperature";
+import { getMinMaxTemperature } from "@/utils/weather";
 import { WeatherDay } from "@/types";
-import { displayMonthDay, displayWeekDay } from "@/utils/helpers";
+import { displayMonthDay, displayWeekDay } from "@/utils/date";
 import Card from "./card";
 import HorizontalScrollContainer from "./horizontal-scroll-container";
 import HourlyWeatherRow from "./hourly-weather-row";

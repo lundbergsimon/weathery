@@ -2,7 +2,7 @@ import { MesanResponse } from "@/api/smhi/mesan/types";
 import { WeatherWeek } from "@/types";
 import { ApiMapper } from "@/types/ApiMapper";
 import { Snow1gMapper } from "@/types/mappers/Snow1gMapper";
-import { groupByWeekAndDay } from "@/utils/helpers";
+import { groupByWeekAndDay } from "@/utils/weather";
 
 const BASE_URL =
   "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1/geotype/point";

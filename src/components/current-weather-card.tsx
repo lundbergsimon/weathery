@@ -3,7 +3,7 @@ import { WeatherHour } from "@/types";
 import { WiDirectionUp } from "react-icons/wi";
 import Card from "./card";
 import WeatherIcon from "./ui/weather-icon";
-import { getParameterValue } from "@/utils/getParameterValue";
+import { getParameterValue } from "@/utils/weather";
 
 interface CurrentWeatherCardProps {
   data: WeatherHour;

@@ -2,8 +2,10 @@ import "@testing-library/jest-dom";
 import {
   displayMonthDay,
   displayWeekDay,
+} from "@/utils/date";
+import {
   groupByWeekAndDay,
-} from "@/utils/helpers";
+} from "@/utils/weather";
 import { WeatherDay, WeatherHour } from "@/types";
 
 describe("displayWeekDay", () => {
