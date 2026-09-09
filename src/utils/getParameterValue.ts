@@ -1,4 +1,4 @@
-import { WeatherParameter } from "@/types";
+import { WeatherParameter, WeatherParameterName } from "@/types";
 
 /**
  * Returns the first value of a WeatherParameter with the given name.
@@ -8,7 +8,7 @@ import { WeatherParameter } from "@/types";
  */
 export const getParameterValue = (
   parameters: WeatherParameter[] | undefined,
-  name: string,
+  name: WeatherParameterName,
 ) => {
   if (!Array.isArray(parameters)) {
     console.warn("Invalid parameters array passed to getParameterValue");
