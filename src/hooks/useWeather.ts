@@ -25,8 +25,9 @@ export default function useWeather(lat?: number, lon?: number) {
         const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
 
         if (!res.ok) {
-          setError(res.statusText);
-          return;
+          if (res.status === 429) {
+            setError("Too many requests");
+          }
         }
 
         const data: WeatherWeek[] = await res.json();
