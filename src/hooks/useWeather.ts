@@ -23,6 +23,12 @@ export default function useWeather(lat?: number, lon?: number) {
       setLoading(true);
       try {
         const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+
+        if (!res.ok) {
+          setError(res.statusText);
+          return;
+        }
+
         const data: WeatherWeek[] = await res.json();
 
         setWeather(data);
