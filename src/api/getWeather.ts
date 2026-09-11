@@ -41,7 +41,10 @@ export async function getWeatherRaw(
   const res = await fetch(endpoint, { cache: "default" });
 
   if (!res.ok) {
-    throw new Error("SMHI API request failed");
+    if (res.statusText.toUpperCase().includes("OUT OF BOUNDS")) {
+      throw new Error("Location is out of bounds");
+    }
+    throw new Error("SMHI API request failed: " + res.status);
   }
 
   const raw: MesanResponse = await res.json();

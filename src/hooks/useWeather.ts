@@ -1,6 +1,5 @@
 "use client";
 
-import { getWeather } from "@/api/getWeather";
 import { WeatherWeek } from "@/types";
 import { useEffect, useState } from "react";
 
@@ -23,10 +22,11 @@ export default function useWeather(lat?: number, lon?: number) {
     const fetchWeather = async () => {
       setLoading(true);
       try {
-        const data = await getWeather(lon, lat);
+        const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+        const data: WeatherWeek[] = await res.json();
 
         setWeather(data);
-      } catch (err) {
+      } catch {
         setError("Failed to fetch data from SMHI!");
       } finally {
         setLoading(false);
