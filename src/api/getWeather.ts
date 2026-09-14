@@ -1,8 +1,8 @@
 import { MesanResponse } from "@/api/smhi/mesan/types";
 import { WeatherWeek } from "@/types";
-import { ApiMapper } from "@/types/ApiMapper";
 import { Snow1gMapper } from "@/types/mappers/Snow1gMapper";
 import { groupByWeekAndDay } from "@/utils/weather";
+import { Snow1gResponse } from "./smhi/snow1g/types";
 
 const BASE_URL =
   "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1/geotype/point";
@@ -22,18 +22,6 @@ export async function getWeather(
   longitude: number,
   latitude: number,
 ): Promise<WeatherWeek[]> {
-  const data: MesanResponse = await getWeatherRaw(longitude, latitude);
-
-  const formattedData: WeatherWeek[] = groupByWeekAndDay(data.timeSeries);
-
-  return formattedData;
-}
-
-export async function getWeatherRaw(
-  longitude: number,
-  latitude: number,
-  mapper: ApiMapper = new Snow1gMapper(),
-): Promise<MesanResponse> {
   const lon = longitude.toFixed(2);
   const lat = latitude.toFixed(2);
   const endpoint = `${BASE_URL}/lon/${lon}/lat/${lat}/data.json`;
@@ -47,7 +35,10 @@ export async function getWeatherRaw(
     throw new Error("SMHI API request failed: " + res.status);
   }
 
-  const raw: MesanResponse = await res.json();
+  const raw: Snow1gResponse = await res.json();
+  const data = new Snow1gMapper().map(raw);
 
-  return mapper.map(raw);
+  const formattedData: WeatherWeek[] = groupByWeekAndDay(data.timeSeries);
+
+  return formattedData;
 }
