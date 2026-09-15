@@ -33,5 +33,5 @@ export default function useGeoLocation() {
     );
   }, []);
 
-  return { coords, error, loading };
+  return { coords, error, loading, setCoords };
 }
