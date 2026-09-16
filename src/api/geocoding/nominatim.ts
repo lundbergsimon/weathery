@@ -18,7 +18,7 @@ export class NominatimService implements GeocodingService {
     try {
       const response = await fetch(url.toString(), {
         headers: {
-          "User-Agent": "WeatheryApp",
+          "User-Agent": "WeatheryApp", // Required by Nominatim
         },
         next: { revalidate: 3600 * 24 }, // Cache results for 24 hours
       });
