@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { geocodingService } from "@/api/geocoding";
-import { rateLimiter } from "@/api/rate-limiter";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -18,25 +17,28 @@ export async function GET(request: NextRequest) {
       { status: 400 },
     );
   }
-  // Simple rate limiting based on IP
-  const ip = request.headers.get("x-forwarded-for") || "anonymous";
-  const isAllowed = await rateLimiter.checkLimit(ip);
 
-  if (!isAllowed) {
-    return NextResponse.json(
-      { error: "Too many requests. Please try again later." },
-      { status: 429 },
-    );
+  const result = await geocodingService.getCoordinates(query);
+
+  if (result.status >= 400) {
+    switch (result.status) {
+      case 404:
+        return NextResponse.json(
+          { error: "Location not found. Please try a different search term." },
+          { status: 404 },
+        );
+      case 429:
+        return NextResponse.json(
+          { error: "System is under heavy load. Please try again later." },
+          { status: 429 },
+        );
+      default:
+        return NextResponse.json(
+          { error: "Internal Server Error. Could not resolve geolocation." },
+          { status: 500 },
+        );
+    }
   }
 
-  const coordinates = await geocodingService.getCoordinates(query);
-
-  if (!coordinates) {
-    return NextResponse.json(
-      { error: "Location not found. Please try a different search term." },
-      { status: 404 },
-    );
-  }
-
-  return NextResponse.json(coordinates);
+  return NextResponse.json(result.data);
 }

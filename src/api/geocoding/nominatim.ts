@@ -1,4 +1,4 @@
-import { GeocodingService, Coordinates } from "./types";
+import { GeocodingService, GeocodingApiResponse } from "./types";
 
 interface NominatimResponse {
   lat: string;
@@ -9,7 +9,7 @@ interface NominatimResponse {
 export class NominatimService implements GeocodingService {
   private readonly baseUrl = "https://nominatim.openstreetmap.org/search";
 
-  async getCoordinates(query: string): Promise<Coordinates | null> {
+  async getCoordinates(query: string): Promise<GeocodingApiResponse> {
     const url = new URL(this.baseUrl);
     url.searchParams.append("q", query);
     url.searchParams.append("format", "json");
@@ -24,23 +24,35 @@ export class NominatimService implements GeocodingService {
       });
 
       if (!response.ok) {
-        return null;
+        return {
+          status: response.status,
+          data: null,
+        };
       }
 
       const data = (await response.json()) as NominatimResponse[];
 
       if (!data || data.length === 0) {
-        return null;
+        return {
+          status: 404,
+          data: null,
+        };
       }
 
       const result = data[0];
       return {
-        lat: parseFloat(result.lat),
-        lon: parseFloat(result.lon),
+        status: 200,
+        data: {
+          lat: Number.parseFloat(result.lat),
+          lon: Number.parseFloat(result.lon),
+        },
       };
     } catch (error) {
       console.error("Nominatim geocoding error:", error);
-      return null;
+      return {
+        status: 500,
+        data: null,
+      };
     }
   }
 }
