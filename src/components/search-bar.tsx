@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 interface SearchBarProps {
   onLocationFound: (lat: number, lon: number) => void;
@@ -24,7 +24,9 @@ export default function SearchBar({
       );
 
       if (response.status === 429) {
-        alert("Too many requests. Please slow down!");
+        alert(
+          "Server is currently receiving to many requests. Please try again later!",
+        );
         return;
       }
 
@@ -42,7 +44,7 @@ export default function SearchBar({
       onLocationFound(coords.lat, coords.lon);
       setQuery("");
       setShowDropdown(false);
-    } catch (error) {
+    } catch {
       alert(
         "A network error occurred. Please check your internet connection and try again.",
       );
