@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { geocodingService } from "@/api/geocoding";
 
 export async function GET(request: NextRequest) {
+  if (process.env.NEXT_PUBLIC_ENABLE_SEARCH_BAR !== "true") {
+    return NextResponse.json({ error: "Feature disabled" }, { status: 403 });
+  }
+
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q");
 
