@@ -1,7 +1,10 @@
 import { RateLimiter } from "./types";
 
 export class InMemoryRateLimiter implements RateLimiter {
-  private requests = new Map<string, { count: number; resetTime: number }>();
+  private readonly requests = new Map<
+    string,
+    { count: number; resetTime: number }
+  >();
   private readonly windowMs = 60 * 1000; // 1 minute window
   private readonly maxRequests = 10; // Max 10 requests per minute per ID
 
