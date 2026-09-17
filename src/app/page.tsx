@@ -6,6 +6,7 @@ import ErrorState from "@/components/ui/error-state";
 import LoadingState from "@/components/ui/loading-state";
 import useGeoLocation from "@/hooks/useGeolocation";
 import useWeather from "@/hooks/useWeather";
+import SearchBar from "@/components/search-bar";
 
 /**
  * A page that displays the current weather data for a given location.
@@ -17,7 +18,12 @@ import useWeather from "@/hooks/useWeather";
  * week card component with the weather data.
  */
 export default function WeatherPage() {
-  const { coords, error: geoError, loading: geoLoading } = useGeoLocation();
+  const {
+    coords,
+    error: geoError,
+    loading: geoLoading,
+    setCoords,
+  } = useGeoLocation();
   const {
     weather: weeks,
     error: weatherError,
@@ -36,6 +42,9 @@ export default function WeatherPage() {
   return (
     <>
       <main className="flex flex-col items-center justify-center p-4">
+        {process.env.NEXT_PUBLIC_ENABLE_SEARCH_BAR === "true" && (
+          <SearchBar onLocationFound={(lat, lon) => setCoords({ lat, lon })} />
+        )}
         <div id="content" className="w-full max-w-fit">
           <section>
             <CurrentWeatherCard data={weeks[0].days[0].hours[0]} />
@@ -47,7 +56,7 @@ export default function WeatherPage() {
             {weeks.map((week) =>
               week.days.map((day) => (
                 <DayWeatherComponent key={day.date} day={day} />
-              ))
+              )),
             )}
           </section>
         </div>
