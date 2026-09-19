@@ -65,29 +65,29 @@ export default function SearchBar({
               setShowDropdown(e.target.value.length > 0);
             }}
             placeholder="Search for a city..."
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+            className="w-full px-4 py-2 rounded-lg border border-surface-border focus:outline-none focus:ring-2 focus:ring-primary bg-surface text-foreground"
             disabled={isSearching}
           />
           {isSearching && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <div className="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full" />
+               <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
             </div>
           )}
         </div>
         <button
           type="submit"
           disabled={isSearching}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
+           className="px-4 py-2 bg-neutral-dark text-white rounded-lg hover:opacity-90 disabled:opacity-50 transition-colors"
         >
           Search
         </button>
       </form>
 
-      {showDropdown && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 text-gray-600 text-sm">
-          Autocomplete not yet available
-        </div>
-      )}
+       {showDropdown && (
+         <div className="absolute z-10 w-full mt-1 bg-surface border border-surface-border rounded-lg shadow-lg p-3 text-foreground text-sm">
+           Autocomplete not yet available
+         </div>
+       )}
     </div>
   );
 }

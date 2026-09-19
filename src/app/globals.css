@@ -14,7 +14,9 @@
 
   --color-primary: var(--color-primary);
   --color-primary-border: var(--color-primary-border);
+  --color-neutral-dark: oklch(40% 0 264);
 }
+
 
 
 :root {
