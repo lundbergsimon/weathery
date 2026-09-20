@@ -25,7 +25,7 @@ export default function SearchBar({
 
       if (response.status === 429) {
         alert(
-          "Server is currently receiving to many requests. Please try again later!",
+          "Server is currently receiving too many requests. Please try again later!",
         );
         return;
       }
@@ -70,24 +70,24 @@ export default function SearchBar({
           />
           {isSearching && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-               <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
+              <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
             </div>
           )}
         </div>
         <button
           type="submit"
           disabled={isSearching}
-           className="px-4 py-2 bg-neutral-dark text-white rounded-lg hover:opacity-90 disabled:opacity-50 transition-colors"
+          className="px-4 py-2 bg-neutral-dark text-white rounded-lg hover:opacity-90 disabled:opacity-50 transition-colors"
         >
           Search
         </button>
       </form>
 
-       {showDropdown && (
-         <div className="absolute z-10 w-full mt-1 bg-surface border border-surface-border rounded-lg shadow-lg p-3 text-foreground text-sm">
-           Autocomplete not yet available
-         </div>
-       )}
+      {showDropdown && (
+        <div className="absolute z-10 w-full mt-1 bg-surface border border-surface-border rounded-lg shadow-lg p-3 text-foreground text-sm">
+          Autocomplete not yet available
+        </div>
+      )}
     </div>
   );
 }
