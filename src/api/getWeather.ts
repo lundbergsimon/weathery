@@ -1,4 +1,3 @@
-import { MesanResponse } from "@/api/smhi/mesan/types";
 import { WeatherWeek } from "@/types";
 import { Snow1gMapper } from "@/types/mappers/Snow1gMapper";
 import { groupByWeekAndDay } from "@/utils/weather";
