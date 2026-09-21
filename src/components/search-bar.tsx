@@ -1,17 +1,71 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
+import type { SearchResult } from "@/types/search";
+import { ChangeEvent, useEffect, useState } from "react";
+import { MdMyLocation } from "react-icons/md";
 
 interface SearchBarProps {
   onLocationFound: (lat: number, lon: number) => void;
+  onGetCurrentLocation: () => void;
 }
 
 export default function SearchBar({
   onLocationFound,
+  onGetCurrentLocation,
 }: Readonly<SearchBarProps>) {
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const debouncedQuery = useDebounce(query, 500);
+
+  useEffect(() => {
+    if (!debouncedQuery) return;
+
+    const controller = new AbortController();
+
+    const search = async () => {
+      setIsSearching(true);
+
+      try {
+        const response = await fetch(
+          `/api/search?q=${encodeURIComponent(debouncedQuery)}`,
+        );
+
+        if (response.status === 429) {
+          alert(
+            "Server is currently receiving too many requests. Please try again later!",
+          );
+          return;
+        }
+
+        if (!response.ok) {
+          // Generic error message to avoid exposing implementation details
+          const data = await response.json().catch(() => ({}));
+          alert(
+            data.error ||
+              "An unexpected error occurred while searching for the location.",
+          );
+          return;
+        }
+
+        const data: SearchResult[] = await response.json();
+        setResults(data);
+        setShowDropdown(true);
+      } catch {
+        alert(
+          "A network error occurred. Please check your internet connection and try again.",
+        );
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    search();
+
+    return () => controller.abort();
+  }, [debouncedQuery]);
 
   const handleSearch = async (e: ChangeEvent) => {
     e.preventDefault();
@@ -19,31 +73,36 @@ export default function SearchBar({
 
     setIsSearching(true);
     try {
-      const response = await fetch(
-        `/api/geocoding?q=${encodeURIComponent(query)}`,
-      );
+      // const response = await fetch(
+      //   `/api/geocoding?q=${encodeURIComponent(query)}`,
+      // );
 
-      if (response.status === 429) {
-        alert(
-          "Server is currently receiving too many requests. Please try again later!",
-        );
-        return;
+      // if (response.status === 429) {
+      //   alert(
+      //     "Server is currently receiving too many requests. Please try again later!",
+      //   );
+      //   return;
+      // }
+
+      // if (!response.ok) {
+      //   // Generic error message to avoid exposing implementation details
+      //   const data = await response.json().catch(() => ({}));
+      //   alert(
+      //     data.error ||
+      //       "An unexpected error occurred while searching for the location.",
+      //   );
+      //   return;
+      // }
+
+      // const coords = await response.json();
+      // onLocationFound(coords.lat, coords.lon);
+      if (results.length > 0) {
+        onLocationFound(results[0].coords.lat, results[0].coords.lon);
+        setQuery("");
+        setShowDropdown(false);
+      } else {
+        alert("No results found. Please try a different search term.");
       }
-
-      if (!response.ok) {
-        // Generic error message to avoid exposing implementation details
-        const data = await response.json().catch(() => ({}));
-        alert(
-          data.error ||
-            "An unexpected error occurred while searching for the location.",
-        );
-        return;
-      }
-
-      const coords = await response.json();
-      onLocationFound(coords.lat, coords.lon);
-      setQuery("");
-      setShowDropdown(false);
     } catch {
       alert(
         "A network error occurred. Please check your internet connection and try again.",
@@ -65,11 +124,20 @@ export default function SearchBar({
               setShowDropdown(e.target.value.length > 0);
             }}
             placeholder="Search for a city..."
-            className="w-full px-4 py-2 rounded-lg border border-surface-border focus:outline-none focus:ring-2 focus:ring-primary bg-surface text-foreground"
+            className="w-full px-4 py-2 pr-10 rounded-lg border border-surface-border focus:outline-none focus:ring-2 focus:ring-primary bg-surface text-foreground"
             disabled={isSearching}
           />
+          <button
+            type="button"
+            onClick={onGetCurrentLocation}
+            disabled={isSearching}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors disabled:opacity-50"
+            title="Use current location"
+          >
+            <MdMyLocation size={20} />
+          </button>
           {isSearching && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <div className="absolute right-10 top-1/2 -translate-y-1/2">
               <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
             </div>
           )}
@@ -85,7 +153,13 @@ export default function SearchBar({
 
       {showDropdown && (
         <div className="absolute z-10 w-full mt-1 bg-surface border border-surface-border rounded-lg shadow-lg p-3 text-foreground text-sm">
-          Autocomplete not yet available
+          <div className="flex-col">
+            {results.map((result) => (
+              <div key={result.coords.lat + result.coords.lon}>
+                {result.name}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
