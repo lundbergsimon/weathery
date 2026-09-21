@@ -37,7 +37,7 @@ export default function WeatherPage() {
             onGetCurrentLocation={getLocation}
           />
         )}
-        {geoLoading && <LoadingState />}
+        {geoLoading && <LoadingState message="Fetching weather data..." />}
         {geoError && <ErrorState message={geoError} />}
         {coords && <Weather coords={coords} />}
       </main>

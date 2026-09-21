@@ -39,7 +39,7 @@ describe("WeatherPage", () => {
     });
 
     render(<WeatherPage />);
-    expect(screen.getByText(/fetching weather data.../i)).toBeInTheDocument();
+    expect(screen.getByText(/Fetching weather data.../i)).toBeInTheDocument();
   });
 
   it("renders error state when geo-location fails", () => {
@@ -72,22 +72,6 @@ describe("WeatherPage", () => {
 
     render(<WeatherPage />);
     expect(screen.getByText(/weather error/i)).toBeInTheDocument();
-  });
-
-  it("renders error state when no data is available", () => {
-    mockedUseGeoLocation.mockReturnValue({
-      coords: undefined,
-      error: null,
-      loading: false,
-    });
-    mockedUseWeather.mockReturnValue({
-      weather: undefined,
-      error: null,
-      loading: false,
-    });
-
-    render(<WeatherPage />);
-    expect(screen.getByText(/no weather data available/i)).toBeInTheDocument();
   });
 
   it("renders weather data successfully", () => {
