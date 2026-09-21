@@ -3,19 +3,22 @@
 import { useDebounce } from "@/hooks/useDebounce";
 import type { SearchResult } from "@/types/search";
 import { ChangeEvent, useEffect, useState } from "react";
+import { MdMyLocation } from "react-icons/md";
 
 interface SearchBarProps {
   onLocationFound: (lat: number, lon: number) => void;
+  onGetCurrentLocation: () => void;
 }
 
 export default function SearchBar({
   onLocationFound,
+  onGetCurrentLocation,
 }: Readonly<SearchBarProps>) {
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedQuery = useDebounce(query, 500);
 
   useEffect(() => {
     if (!debouncedQuery) return;
@@ -121,11 +124,20 @@ export default function SearchBar({
               setShowDropdown(e.target.value.length > 0);
             }}
             placeholder="Search for a city..."
-            className="w-full px-4 py-2 rounded-lg border border-surface-border focus:outline-none focus:ring-2 focus:ring-primary bg-surface text-foreground"
+            className="w-full px-4 py-2 pr-10 rounded-lg border border-surface-border focus:outline-none focus:ring-2 focus:ring-primary bg-surface text-foreground"
             disabled={isSearching}
           />
+          <button
+            type="button"
+            onClick={onGetCurrentLocation}
+            disabled={isSearching}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors disabled:opacity-50"
+            title="Use current location"
+          >
+            <MdMyLocation size={20} />
+          </button>
           {isSearching && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <div className="absolute right-10 top-1/2 -translate-y-1/2">
               <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
             </div>
           )}

@@ -1,12 +1,10 @@
 "use client";
 
-import CurrentWeatherCard from "@/components/current-weather-card";
-import DayWeatherComponent from "@/components/day-weather-component";
 import ErrorState from "@/components/ui/error-state";
 import LoadingState from "@/components/ui/loading-state";
 import useGeoLocation from "@/hooks/useGeolocation";
-import useWeather from "@/hooks/useWeather";
 import SearchBar from "@/components/search-bar";
+import Weather from "@/components/weather";
 
 /**
  * A page that displays the current weather data for a given location.
@@ -23,43 +21,25 @@ export default function WeatherPage() {
     error: geoError,
     loading: geoLoading,
     setCoords,
+    getLocation,
+    clearError,
   } = useGeoLocation();
-  const {
-    weather: weeks,
-    error: weatherError,
-    loading: weatherLoading,
-  } = useWeather(coords?.lat, coords?.lon);
-
-  if (geoLoading || weatherLoading)
-    return <LoadingState message="Fetching weather data..." />;
-
-  if (geoError) return <ErrorState message={geoError} />;
-  if (weatherError) return <ErrorState message={weatherError} />;
-
-  if (coords === undefined || weeks === undefined)
-    return <ErrorState message="No weather data available." />;
 
   return (
     <>
       <main className="flex flex-col items-center justify-center p-4">
         {process.env.NEXT_PUBLIC_ENABLE_SEARCH_BAR === "true" && (
-          <SearchBar onLocationFound={(lat, lon) => setCoords({ lat, lon })} />
+          <SearchBar
+            onLocationFound={(lat, lon) => {
+              clearError();
+              setCoords({ lat, lon });
+            }}
+            onGetCurrentLocation={getLocation}
+          />
         )}
-        <div id="content" className="w-full max-w-fit">
-          <section>
-            <CurrentWeatherCard data={weeks[0].days[0].hours[0]} />
-          </section>
-          <section
-            id="day-list"
-            className="flex flex-col gap-4 pt-4 justify-center max-w-fit min-w-0"
-          >
-            {weeks.map((week) =>
-              week.days.map((day) => (
-                <DayWeatherComponent key={day.date} day={day} />
-              )),
-            )}
-          </section>
-        </div>
+        {geoLoading && <LoadingState />}
+        {geoError && <ErrorState message={geoError} />}
+        {coords && <Weather coords={coords} />}
       </main>
       <footer className="min-h-10">
         <p className="text-xs text-text-muted text-center">

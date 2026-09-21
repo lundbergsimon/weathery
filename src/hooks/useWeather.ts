@@ -21,20 +21,27 @@ export default function useWeather(lat?: number, lon?: number) {
 
     const fetchWeather = async () => {
       setLoading(true);
+      setError(undefined);
       try {
         const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
 
         if (!res.ok) {
-          if (res.status === 429) {
-            setError("Too many requests");
-          }
+          throw new Error(
+            res.status === 429
+              ? "Too many requests"
+              : "Failed to fetch weather data.",
+          );
         }
 
         const data: WeatherWeek[] = await res.json();
 
         setWeather(data);
-      } catch {
-        setError("Failed to fetch data from SMHI!");
+      } catch (error) {
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch weather data.",
+        );
       } finally {
         setLoading(false);
       }
