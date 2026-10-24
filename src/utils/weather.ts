@@ -23,7 +23,6 @@ export const getParameterValue = (
 
   const param = parameters.find((p) => p.name === name);
   if (!param || param.values.length === 0) {
-    console.warn(`No parameter with name "${name}" found`);
     return null;
   }
   return param.values[0];
