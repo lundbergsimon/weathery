@@ -1,5 +1,5 @@
+import { getWeather } from "@/api/weather";
 import { NextRequest, NextResponse } from "next/server";
-import { getWeather } from "../../../api/getWeather";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);

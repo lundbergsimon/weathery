@@ -2,7 +2,7 @@ import {
   Snow1gData,
   Snow1gResponse,
   Snow1gTimeSeriesEntry,
-} from "@/api/smhi/snow1g/types";
+} from "@/api/weather/providers/smhi/snow1g/types";
 import {
   WeatherHour,
   WeatherParameter,
@@ -11,7 +11,7 @@ import {
 } from "..";
 import { ApiMapper } from "../ApiMapper";
 import { ParameterMappingNotFoundError } from "../errors";
-import { MesanResponse } from "@/api/smhi/mesan/types";
+import { MesanResponse } from "@/api/weather/providers/smhi/mesan/types";
 
 export class Snow1gMapper implements ApiMapper {
   map(raw: Snow1gResponse): MesanResponse {

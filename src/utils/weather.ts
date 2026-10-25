@@ -1,10 +1,10 @@
+import { SMHI_WEATHER_SYMBOLS } from "@/api/weather/providers/smhi/mesan/constants";
 import {
   WeatherDay,
   WeatherHour,
   WeatherParameter,
   WeatherParameterName,
 } from "@/types";
-import { SMHI_WEATHER_SYMBOLS } from "@/api/smhi/mesan/constants";
 
 /**
  * Returns the first value of a WeatherParameter with the given name.

@@ -1,4 +1,4 @@
-import { SMHI_WEATHER_SYMBOLS } from "@/api/smhi/mesan/constants";
+import { SMHI_WEATHER_SYMBOLS } from "@/api/weather/providers/smhi/mesan/constants";
 import { WeatherHour } from "@/types";
 import { WiDirectionUp } from "react-icons/wi";
 import Card from "./card";

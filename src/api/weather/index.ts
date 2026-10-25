@@ -1,7 +1,7 @@
 import { WeatherWeek } from "@/types";
 import { Snow1gMapper } from "@/types/mappers/Snow1gMapper";
 import { groupByWeekAndDay } from "@/utils/weather";
-import { Snow1gResponse } from "./smhi/snow1g/types";
+import { Snow1gResponse } from "./providers/smhi/snow1g/types";
 
 const BASE_URL =
   "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1/geotype/point";
